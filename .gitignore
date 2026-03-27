@@ -1,0 +1,19 @@
+# --- Build System ---
+build/
+bin/
+lib/
+out/
+
+# --- IDE & Editor ---
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# --- C++ Temporaries ---
+*.o
+*.a
+*.so
+*.out
+*.d
