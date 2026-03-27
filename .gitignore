@@ -6,6 +6,7 @@ out/
 
 # --- IDE & Editor ---
 .vscode/
+.vs/
 .idea/
 *.swp
 *~
