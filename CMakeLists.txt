@@ -80,9 +80,15 @@ target_link_libraries(${BINARY_NAME} PRIVATE
 
 # --- ASSETS ---
 # Copy assets folder into binary folder
-add_custom_command(TARGET ${BINARY_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    "${CMAKE_CURRENT_SOURCE_DIR}/assets"
-    "$<TARGET_FILE_DIR:${BINARY_NAME}>/assets"
-)
+set(ASSETS_SRC "${CMAKE_CURRENT_SOURCE_DIR}/assets")
 
+if(EXISTS "${ASSETS_SRC}")
+    add_custom_command(TARGET ${BINARY_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${ASSETS_SRC}"
+        "$<TARGET_FILE_DIR:${BINARY_NAME}>/assets"
+        COMMENT "Copying assets to build directory..."
+    )
+else()
+    message(WARNING "Assets directory not found at ${ASSETS_SRC}. Skipping copy.")
+endif()
