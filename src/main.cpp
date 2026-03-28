@@ -1,50 +1,27 @@
+#include <iostream>
+
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-#include <iostream>
+#include "Constants.hpp"
+#include "WindowManager.hpp"
 
 int main() {
 
-    // Init GLFW
-    if (!glfwInit()) {
-        std::cerr << "GLFW initialization error" << std::endl;
-        return -1;
-    } else {
-        std::cout << "GLFW initialization success" << std::endl;
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
-
-    GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL Test", NULL, NULL);
-    if (!window) { glfwTerminate(); return -1; }
-    glfwMakeContextCurrent(window);
-
-    // Init GLAD
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cerr << "GLAD initialization error" << std::endl;
-        return -1;
-    } else {
-        std::cout << "GLAD initialization success" << std::endl;
-    }
-
-    // Init ImGui
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.IniFilename = NULL; // Deactivate ini file
-    ImGui::StyleColorsDark(); // Set ImGUI dark theme
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330 core");
+    snd3D::WindowManager windowMan(
+            snd3D::constants::window::DEFAULT_WIDTH,
+            snd3D::constants::window::DEFAULT_HEIGHT,
+            snd3D::constants::window::NAME,
+            snd3D::constants::window::DEFAULT_VSYNC
+    );
 
     // Game Loop
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(windowMan.getWindow())) {
         glfwPollEvents();
+
+        if (glfwGetKey(windowMan.getWindow(), GLFW_KEY_F11)) windowMan.toggleFullScreen();
         
         // Start ImGui Frame
         ImGui_ImplOpenGL3_NewFrame();
@@ -61,16 +38,8 @@ int main() {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(windowMan.getWindow());
     }
 
-    std::cout << "Closing App" << std::endl;
-
-    // Cleanup
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-    glfwDestroyWindow(window);
-    glfwTerminate();
     return 0;
 }
