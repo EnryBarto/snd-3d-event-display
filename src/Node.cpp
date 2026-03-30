@@ -21,9 +21,9 @@ namespace snd3D {
         }
 
         // Create children nodes
-        childrenNode.reserve(node->mNumChildren);
+        this->childrenNode.reserve(node->mNumChildren);
         for (unsigned int i = 0; i < node->mNumChildren; i++) {
-            childrenNode.push_back(std::make_unique<Node>(scene, node->mChildren[i], meshes));
+            this->childrenNode.push_back(std::make_unique<Node>(scene, node->mChildren[i], meshes));
         }
     }
 }

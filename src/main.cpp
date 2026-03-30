@@ -32,9 +32,10 @@ int main() {
 
     if (!scene) {
         std::cerr << "Error loading file: " << importer.GetErrorString() << std::endl;
-    } else {
-        snd3D::Object obj(scene);
+        return -1;
     }
+    
+    snd3D::Object obj(scene);
 
     // Game Loop
     while (!glfwWindowShouldClose(windowMan.getWindow())) {
