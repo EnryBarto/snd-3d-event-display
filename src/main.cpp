@@ -8,6 +8,11 @@
 #include "Constants.hpp"
 #include "WindowManager.hpp"
 
+#include "Object.hpp"
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+
 int main() {
 
     snd3D::WindowManager windowMan(
@@ -16,6 +21,20 @@ int main() {
             snd3D::constants::window::NAME,
             snd3D::constants::window::DEFAULT_VSYNC
     );
+
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile("assets/geometries/SND.gltf",
+        aiProcess_Triangulate |
+        aiProcess_GenNormals |
+        aiProcess_JoinIdenticalVertices |
+        aiProcess_ImproveCacheLocality
+    );
+
+    if (!scene) {
+        std::cerr << "Error loading file: " << importer.GetErrorString() << std::endl;
+    } else {
+        snd3D::Object obj(scene);
+    }
 
     // Game Loop
     while (!glfwWindowShouldClose(windowMan.getWindow())) {

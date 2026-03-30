@@ -40,6 +40,7 @@ set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)              # Disable ex
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)                     # Disable assimp test suuite building
 set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)                         # Don't install the library on the system, keep it into the build folder
 set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "" FORCE)                       # Build assimp zlib version
+set(ASSIMP_BUILD_GLTF_IMPORTER ON CACHE BOOL "" FORCE)              # Enable glTF importer
 
 FetchContent_MakeAvailable(glfw glm assimp)
 
