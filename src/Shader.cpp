@@ -1,5 +1,8 @@
 #include "Shader.hpp"
 
+#include <glm/gtc/type_ptr.hpp>
+#include <GLFW/glfw3.h>
+
 #include "Constants.hpp"
 #include "ShaderMaker.hpp"
 
@@ -14,10 +17,20 @@ namespace snd3D {
 
 		this->programId = ShaderMaker::createProgram(vS, fS);
 		this->name = std::string(name);
+
+        this->uniform_Model = glGetUniformLocation(this->programId, "Model");
+        this->uniform_Projection = glGetUniformLocation(this->programId, "Projection");
+        this->uniform_View = glGetUniformLocation(this->programId, "View");
+        this->uniform_ViewPos = glGetUniformLocation(this->programId, "ViewPos");
+        this->uniform_MaterialAmbient = glGetUniformLocation(this->programId, "material.ambient");
+        this->uniform_MaterialDiffuse = glGetUniformLocation(this->programId, "material.diffuse");
+        this->uniform_MaterialSpecular = glGetUniformLocation(this->programId, "material.specular");
+        this->uniform_MaterialShininess = glGetUniformLocation(this->programId, "material.shininess");
+        this->uniform_Time = glGetUniformLocation(this->programId, "time");
 	}
 
 	Shader::~Shader() {
-		glDeleteProgram(this->getProgramId());
+		glDeleteProgram(this->programId);
 	}
 
 	std::string Shader::getName() {
@@ -27,4 +40,20 @@ namespace snd3D {
 	GLuint Shader::getProgramId() {
 		return programId;
 	}
+
+    void Shader::use(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, Material* material) {
+
+        glUseProgram(this->programId);
+
+        // Check for uniform existence in the active shader; if present, update them
+        if (this->uniform_Model != -1) glUniformMatrix4fv(this->uniform_Model, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+        if (this->uniform_Projection != -1) glUniformMatrix4fv(this->uniform_Projection, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+        if (this->uniform_View != -1) glUniformMatrix4fv(this->uniform_View, 1, GL_FALSE, glm::value_ptr(viewMatrix));
+        if (this->uniform_ViewPos != -1) glUniform3f(this->uniform_ViewPos, camPos.x, camPos.y, camPos.z);
+        if (this->uniform_MaterialAmbient != -1 && material != nullptr) glUniform3fv(this->uniform_MaterialAmbient, 1, glm::value_ptr(material->getAmbient()));
+        if (this->uniform_MaterialDiffuse != -1 && material != nullptr) glUniform3fv(this->uniform_MaterialDiffuse, 1, glm::value_ptr(material->getDiffuse()));
+        if (this->uniform_MaterialSpecular != -1 && material != nullptr) glUniform3fv(this->uniform_MaterialSpecular, 1, glm::value_ptr(material->getSpecular()));
+        if (this->uniform_MaterialShininess != -1 && material != nullptr) glUniform1f(this->uniform_MaterialShininess, material->getShininess());
+        if (this->uniform_Time != -1) glUniform1f(this->uniform_Time, (float)glfwGetTime());
+    }
 }

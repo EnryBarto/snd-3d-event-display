@@ -2,9 +2,15 @@
 
 #include <cstdint>
 #include <vector>
+#include <memory>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+
+#include "Shader.hpp"
+#include "Material.hpp"
+
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 namespace snd3D {
     class GpuMesh {
@@ -18,6 +24,8 @@ namespace snd3D {
                 glm::vec3 anchorPosition
             );
             void setModes(GLenum renderMode);
+            void setShader(std::shared_ptr<Shader> shader);
+            void render(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor, Material* material);
 
         private:
             const static uint8_t VERTICES_LAYER = 0;
@@ -35,5 +43,8 @@ namespace snd3D {
             GLuint eboIndices = 0;  // Element Buffer Object (EBO) identifier
 
             GLenum drawMode = GL_TRIANGLES; // Vertex interpretation mode for the rendering stage (ex. GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_LINES, GL_POINTS)
+            std::shared_ptr<Shader> shader;
+
+            //bool usingBlinnPhong = true; // Enable default blinn phong if supported
     };
 }

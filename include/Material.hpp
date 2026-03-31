@@ -8,7 +8,11 @@
 namespace snd3D {
     class Material {
         public:
-            Material(aiMaterial* material);
+            Material(const aiMaterial* material);
+            glm::vec3 getAmbient();
+            glm::vec3 getDiffuse();
+            glm::vec3 getSpecular();
+            float getShininess();
 
         private:
             std::string name;

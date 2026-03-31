@@ -20,4 +20,6 @@ namespace snd3D::constants {
     namespace paths {
         inline constexpr const char* SHADER_FOLDER = "assets/shaders/";
     }
+
+    inline constexpr int ANCHOR_SIZE = 15;
 }

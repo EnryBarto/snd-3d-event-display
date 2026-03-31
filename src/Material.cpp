@@ -6,7 +6,7 @@
 
 namespace snd3D {
 
-    Material::Material(aiMaterial* material) {
+    Material::Material(const aiMaterial* material) {
         aiString name;
         aiColor4D baseColor(0.5f, 0.5f, 0.5f, 1.0f);
         float metallic = 0, roughness = 1;
@@ -28,5 +28,21 @@ namespace snd3D {
         this->diffuse = color * (1.0f - metallic);
         this->specular = glm::mix(glm::vec3(0.04f), color, metallic);
         this->shininess = (1.0f - roughness) * 128.0f;
+    }
+
+    glm::vec3 Material::getAmbient() {
+        return this->ambient;
+    }
+
+    glm::vec3 Material::getDiffuse() {
+        return this->diffuse;
+    }
+
+    glm::vec3 Material::getSpecular() {
+        return this->specular;
+    }
+
+    float Material::getShininess() {
+        return this->shininess;
     }
 }

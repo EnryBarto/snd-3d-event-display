@@ -66,4 +66,12 @@ namespace snd3D {
     void Mesh::setMaterial(const shared_ptr<Material>& material) {
         this->material = material;
     }
+
+    void Mesh::setShader(const std::shared_ptr<Shader>& shader) {
+        this->gpuMesh->setShader(shader);
+    }
+
+    void Mesh::render(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {
+        this->gpuMesh->render(modelMatrix, viewMatrix, projectionMatrix, camPos, showAnchor, this->material.get());
+    }
 }

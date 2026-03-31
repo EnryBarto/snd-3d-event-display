@@ -6,7 +6,7 @@ namespace snd3D {
     
         aiMatrix4x4 matrix = node->mTransformation;
 
-        this->modelMatrix = glm::mat4(
+        this->localModelMatrix = glm::mat4(
             matrix.a1, matrix.b1, matrix.c1, matrix.d1,
             matrix.a2, matrix.b2, matrix.c2, matrix.d2,
             matrix.a3, matrix.b3, matrix.c3, matrix.d3,
@@ -24,6 +24,28 @@ namespace snd3D {
         this->childrenNode.reserve(node->mNumChildren);
         for (unsigned int i = 0; i < node->mNumChildren; i++) {
             this->childrenNode.push_back(std::make_unique<Node>(scene, node->mChildren[i], meshes));
+        }
+    }
+
+    void Node::setShader(const std::shared_ptr<Shader>& shader) {
+        for (auto& node : this->childrenNode) {
+            node->setShader(shader);
+        }
+
+        for (auto& mesh : this->meshes) {
+            mesh->setShader(shader);
+        }
+    }
+
+    void Node::render(const glm::mat4& parentModelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {
+        glm::mat4 modelMatrix = parentModelMatrix * this->localModelMatrix;
+
+        for (auto& node : this->childrenNode) {
+            node->render(modelMatrix, viewMatrix, projectionMatrix, camPos, showAnchor);
+        }
+
+        for (auto& mesh : this->meshes) {
+            mesh->render(modelMatrix, viewMatrix, projectionMatrix, camPos, showAnchor);
         }
     }
 }

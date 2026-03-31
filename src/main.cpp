@@ -1,17 +1,20 @@
 #include <iostream>
+#include <memory>
 
 #include <glad/glad.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-
-#include "Constants.hpp"
-#include "WindowManager.hpp"
-
-#include "Object.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
+
+#include "Constants.hpp"
+#include "WindowManager.hpp"
+#include "Object.hpp"
+#include "Shader.hpp"
+#include "Camera.hpp"
+#include "Projection.hpp"
 
 int main() {
 
@@ -35,7 +38,12 @@ int main() {
         return -1;
     }
     
+    // Debug objects
     snd3D::Object obj(scene);
+    std::shared_ptr<snd3D::Shader> flat = std::make_shared<snd3D::Shader>("Flat", "flat.vert", "flat.frag");
+    obj.setShader(flat);
+    snd3D::Camera camera(glm::vec3(400), glm::vec3(0, 0, 554));
+    snd3D::Projection proj(2, 80);
 
     // Game Loop
     while (!glfwWindowShouldClose(windowMan.getWindow())) {
@@ -54,7 +62,9 @@ int main() {
         ImGui::End();
 
         // Rendering
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        obj.render(camera.getViewMatrix(), proj.getProjectionMatrix(), camera.getPosition(), false);
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

@@ -24,4 +24,12 @@ namespace snd3D {
         // Recursively start creating nodes
         this->rootNode = std::make_unique<Node>(scene, scene->mRootNode, meshes);
     }
+
+    void Object::setShader(const std::shared_ptr<Shader>& shader) {
+        this->rootNode->setShader(shader);
+    }
+
+    void Object::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {
+        this->rootNode->render(this->modelMatrix, viewMatrix, projectionMatrix, camPos, showAnchor);
+    }
 }
