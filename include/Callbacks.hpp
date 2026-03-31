@@ -19,8 +19,6 @@ namespace snd3D {
 
         private:
             App& app; // Keep reference to App object to handle events
-            int lastMousePosX = 0;
-            int lastMousePosY = 0;
 
             // Instance methods that will be called on the Callbacks object saved in the window user point
             void keyAction(int key, int scancode, int action, int mods);
@@ -28,6 +26,5 @@ namespace snd3D {
             void mouseButton(int button, int action, int mods);
             void framebufferSize(int newWidth, int newHeight);
             void scroll(double xOffset, double yOffset);
-            glm::vec3 cursorToUnitSphere(int x, int y);
     };
 }

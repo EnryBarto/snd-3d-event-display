@@ -19,7 +19,7 @@ namespace snd3D {
             new Callbacks(*this)
         );
 
-        this->scene = std::make_unique<Scene>(*this->windowManager);
+        this->scene = std::make_unique<Scene>(*this->windowManager, this->stateManager);
     }
 
     void App::run() {
