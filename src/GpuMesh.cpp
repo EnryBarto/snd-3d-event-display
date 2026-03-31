@@ -18,7 +18,7 @@ namespace snd3D {
         glDeleteBuffers(1, &this->vboVertices);
         glDeleteBuffers(1, &this->vboColors);
         glDeleteBuffers(1, &this->vboNormals);
-        glDeleteBuffers(1, &this->eboIndices); 
+        glDeleteBuffers(1, &this->eboIndices);
     }
 
     void GpuMesh::initBuffers(vector<glm::vec3>& vertices, vector<glm::vec4>& colors, vector<glm::vec3>& normals, vector<GLuint>& indices, glm::vec3 anchorPosition) {

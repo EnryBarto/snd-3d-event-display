@@ -1,12 +1,14 @@
 #pragma once
 
-#define GLFW_INCLUDE_NONE
+#define GLFW_INCLUDE_NONE // Include only GLFW types
 #include "GLFW/glfw3.h"
+
+#include "Callbacks.hpp"
 
 namespace snd3D {
     class WindowManager {
         public:
-            WindowManager(int width, int height, const char* title, bool enableVsync);
+            WindowManager(int width, int height, const char* title, bool enableVsync, Callbacks* callbacksHandler);
             ~WindowManager();
             GLFWwindow* getWindow();
             bool isVsyncActive();

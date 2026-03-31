@@ -1,10 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <vector>
-#include <string>
 
-#include <assimp/types.h>
+#include <assimp/scene.h>
 #include <glm/fwd.hpp>
 
 #include "Node.hpp"

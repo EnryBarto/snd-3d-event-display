@@ -1,7 +1,6 @@
 #include "Shader.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
-#include <GLFW/glfw3.h>
 
 #include "Constants.hpp"
 #include "ShaderMaker.hpp"
@@ -20,7 +19,6 @@ namespace snd3D {
         this->uniform_MaterialDiffuse = glGetUniformLocation(this->programId, "material.diffuse");
         this->uniform_MaterialSpecular = glGetUniformLocation(this->programId, "material.specular");
         this->uniform_MaterialShininess = glGetUniformLocation(this->programId, "material.shininess");
-        this->uniform_Time = glGetUniformLocation(this->programId, "time");
 	}
 
 	Shader::~Shader() {
@@ -48,6 +46,5 @@ namespace snd3D {
         if (this->uniform_MaterialDiffuse != -1 && material != nullptr) glUniform3fv(this->uniform_MaterialDiffuse, 1, glm::value_ptr(material->getDiffuse()));
         if (this->uniform_MaterialSpecular != -1 && material != nullptr) glUniform3fv(this->uniform_MaterialSpecular, 1, glm::value_ptr(material->getSpecular()));
         if (this->uniform_MaterialShininess != -1 && material != nullptr) glUniform1f(this->uniform_MaterialShininess, material->getShininess());
-        if (this->uniform_Time != -1) glUniform1f(this->uniform_Time, (float)glfwGetTime());
     }
 }

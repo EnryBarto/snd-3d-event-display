@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-#include <assimp/scene.h>
+#include <assimp/mesh.h>
 #include <glm/glm.hpp>
 
 #include "Material.hpp"

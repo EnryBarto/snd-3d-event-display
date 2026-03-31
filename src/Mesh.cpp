@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <glad/glad.h>
+
 using namespace std;
 using namespace glm;
 

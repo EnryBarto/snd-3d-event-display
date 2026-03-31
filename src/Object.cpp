@@ -1,5 +1,12 @@
 #include "Object.hpp"
 
+#include <vector>
+
+#include <assimp/color4.h>
+
+#include "Material.hpp"
+#include "Mesh.hpp"
+
 namespace snd3D {
 
     Object::Object(const aiScene* scene) {

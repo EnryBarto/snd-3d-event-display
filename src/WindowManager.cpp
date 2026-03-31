@@ -8,9 +8,11 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include "Callbacks.hpp"
+
 namespace snd3D {
 
-    WindowManager::WindowManager(int width, int height, const char* title, bool enableVsync) {
+    WindowManager::WindowManager(int width, int height, const char* title, bool enableVsync, Callbacks* callbacksHandler) {
         // Init GLFW
         if (!glfwInit()) {
             throw std::runtime_error("GLFW initialization error");
@@ -45,6 +47,9 @@ namespace snd3D {
         ImGui::StyleColorsDark(); // Set ImGUI dark theme
         ImGui_ImplGlfw_InitForOpenGL(this->window, true);
         ImGui_ImplOpenGL3_Init("#version 330 core");
+
+        // Bind callbacks
+        glfwSetWindowUserPointer(this->window, callbacksHandler);
     }
 
     WindowManager::~WindowManager() {

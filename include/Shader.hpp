@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+
 #include <glad/glad.h>
 #include <glm/fwd.hpp>
 
@@ -28,6 +29,5 @@ namespace snd3D {
             GLint uniform_MaterialDiffuse = -1;
             GLint uniform_MaterialSpecular = -1;
             GLint uniform_MaterialShininess = -1;
-            GLint uniform_Time = -1;
 	};
 }
