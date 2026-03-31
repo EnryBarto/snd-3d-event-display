@@ -4,8 +4,8 @@
 
 namespace snd3D {
 	#pragma warning(disable:4996)
-	char* ShaderMaker::readShaderSource(const char* shaderFile) {
-		FILE* fp = fopen(shaderFile, "rb");
+	char* ShaderMaker::readShaderSource(std::string shaderFile) {
+		FILE* fp = fopen(shaderFile.c_str(), "rb");
 
 		if (fp == NULL) { return NULL; }
 
@@ -22,7 +22,7 @@ namespace snd3D {
 		return buf;
 	}
 
-	GLuint ShaderMaker::createProgram(char* vertexfilename, char* fragmentfilename) {
+	GLuint ShaderMaker::createProgram(std::string vertexfilename, std::string fragmentfilename) {
 
 		int success;
 		char infoLog[512];
