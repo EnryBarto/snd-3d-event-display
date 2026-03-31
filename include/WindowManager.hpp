@@ -23,7 +23,7 @@ namespace snd3D {
 
         private:
             GLFWwindow* window;
-            bool framebufferChanged, vsync, fullScreen = false;
+            bool framebufferChanged = false, vsync, fullScreen = false;
             int lastWindowPosition[2] = {0, 0}, lastWindowSize[2] = {0, 0}; // Used to toggle between full screen and windowed view
 
             GLFWmonitor* getCurrentMonitor();

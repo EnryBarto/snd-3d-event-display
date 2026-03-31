@@ -55,6 +55,17 @@ namespace snd3D {
         glfwSetMouseButtonCallback(this->window, Callbacks::mouseButton);
         glfwSetFramebufferSizeCallback(this->window, Callbacks::framebufferSize);
         glfwSetScrollCallback(this->window, Callbacks::scroll);
+
+        // Enable transparency management and depth test
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_DEPTH_TEST);
+
+        // Set base color
+        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+
+        // Set polygon mode
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
     WindowManager::~WindowManager() {
