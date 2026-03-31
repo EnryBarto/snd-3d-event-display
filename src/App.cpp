@@ -10,7 +10,7 @@
 
 namespace snd3D {
 
-	App::App() {
+    App::App() {
 
         this->windowManager = std::make_unique<WindowManager>(
             snd3D::constants::window::DEFAULT_WIDTH,
@@ -21,7 +21,7 @@ namespace snd3D {
         );
 
         this->scene = std::make_unique<Scene>(*this->windowManager);
-	}
+    }
 
     void App::run() {
 

@@ -54,6 +54,7 @@ namespace snd3D {
     void Callbacks::framebufferSize(int newWidth, int newHeight) {
         this->app.windowManager->frameBufferChanged();
     }
+
     void Callbacks::scroll(double xOffset, double yOffset) {
         this->app.scene->camera->zoom(yOffset);
     }

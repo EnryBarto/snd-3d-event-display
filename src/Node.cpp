@@ -1,9 +1,9 @@
-#include "Node.hpp" 
+#include "Node.hpp"
 
 namespace snd3D {
 
     Node::Node(const aiScene* scene, aiNode* node, std::vector<std::shared_ptr<Mesh>>& meshes) {
-    
+
         aiMatrix4x4 matrix = node->mTransformation;
 
         this->localModelMatrix = glm::mat4(

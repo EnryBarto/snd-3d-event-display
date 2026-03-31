@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 namespace snd3D {
-	class Projection {
+    class Projection {
         public:
             Projection(float aspectRatio, float fov);
             void changeAspectRatio(float newAspectRatio);
@@ -18,5 +18,5 @@ namespace snd3D {
             glm::mat4 matrix;
 
             void computeProjectionMatrix();
-	};
+    };
 }

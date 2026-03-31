@@ -7,9 +7,9 @@
 
 namespace snd3D {
 
-	Shader::Shader(std::string name, std::string vertexShader, std::string fragmentShader) {
-		this->programId = ShaderMaker::createProgram(std::string(constants::paths::SHADER_FOLDER) + vertexShader, std::string(constants::paths::SHADER_FOLDER) + fragmentShader);
-		this->name = std::string(name);
+    Shader::Shader(std::string name, std::string vertexShader, std::string fragmentShader) {
+        this->programId = ShaderMaker::createProgram(std::string(constants::paths::SHADER_FOLDER) + vertexShader, std::string(constants::paths::SHADER_FOLDER) + fragmentShader);
+        this->name = std::string(name);
 
         this->uniform_Model = glGetUniformLocation(this->programId, "Model");
         this->uniform_Projection = glGetUniformLocation(this->programId, "Projection");
@@ -19,19 +19,19 @@ namespace snd3D {
         this->uniform_MaterialDiffuse = glGetUniformLocation(this->programId, "material.diffuse");
         this->uniform_MaterialSpecular = glGetUniformLocation(this->programId, "material.specular");
         this->uniform_MaterialShininess = glGetUniformLocation(this->programId, "material.shininess");
-	}
+    }
 
-	Shader::~Shader() {
-		glDeleteProgram(this->programId);
-	}
+    Shader::~Shader() {
+        glDeleteProgram(this->programId);
+    }
 
-	std::string Shader::getName() {
-		return name;
-	}
+    std::string Shader::getName() {
+        return name;
+    }
 
-	GLuint Shader::getProgramId() {
-		return programId;
-	}
+    GLuint Shader::getProgramId() {
+        return programId;
+    }
 
     void Shader::use(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, Material* material) {
 
