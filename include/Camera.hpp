@@ -9,6 +9,7 @@ namespace snd3D {
 			const glm::mat4& getViewMatrix();
 			const glm::vec3& getPosition();
 			void rotateAroundCameraTarget(glm::vec3 axis, float angle);
+			void zoom(float offset);
 
 		private:
 			glm::vec3 position;  // Camera position in 3D space

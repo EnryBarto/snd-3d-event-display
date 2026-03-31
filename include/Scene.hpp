@@ -9,6 +9,9 @@
 
 namespace snd3D {
 	class Scene {
+
+		friend class Callbacks; // Must be able to access the camera
+
 		public:
 			Scene(WindowManager& winMan);
 			void update();

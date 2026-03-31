@@ -2,6 +2,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Constants.hpp"
+
 using namespace glm;
 
 namespace snd3D {
@@ -33,6 +35,18 @@ namespace snd3D {
 		// New absolute position
 		this->position = this->target + rotated;
 
+		this->viewMatrix = lookAt(this->position, this->target, this->upVector);
+	}
+
+	void Camera::zoom(float offset) {
+		vec3 direction = target - position;
+		float distance = length(direction);
+
+		// Don't exceed target
+		if (offset > 0 && distance < constants::limits::ZOOM_DISTANCE_MIN) return;
+
+		// Move
+		this->position += normalize(direction) * offset * (distance * constants::ZOOM_FACTOR);
 		this->viewMatrix = lookAt(this->position, this->target, this->upVector);
 	}
 }

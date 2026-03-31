@@ -17,6 +17,7 @@ namespace snd3D::constants {
         inline constexpr float PROJ_FOVY_DEFAULT = 80;
         inline constexpr float PROJ_FOVY_MAX = 115;
         inline constexpr float PROJ_FOVY_MIN = 45;
+        inline constexpr float ZOOM_DISTANCE_MIN = 50;
     }
 
     namespace paths {
@@ -24,4 +25,5 @@ namespace snd3D::constants {
     }
 
     inline constexpr int ANCHOR_SIZE = 15;
+    inline constexpr float ZOOM_FACTOR = 0.1f;
 }

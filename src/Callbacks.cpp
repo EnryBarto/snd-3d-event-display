@@ -1,6 +1,5 @@
 #include "Callbacks.hpp"
 
-#include <iostream>
 #include "App.hpp"
 
 namespace snd3D {
@@ -56,5 +55,6 @@ namespace snd3D {
         this->app.windowManager->frameBufferChanged();
     }
     void Callbacks::scroll(double xOffset, double yOffset) {
+        this->app.scene->camera->zoom(yOffset);
     }
 }
