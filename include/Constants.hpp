@@ -8,4 +8,12 @@ namespace snd3D::constants {
         inline constexpr const char* NAME = "SND 3D Event Display";
         inline constexpr bool DEFAULT_VSYNC = true;
     }
+
+    namespace limits {
+        inline constexpr float PROJ_FARPLANE = 2000;
+        inline constexpr float PROJ_NEARPLANE = 0.1f;
+        inline constexpr float PROJ_FOVY_DEFAULT = 80;
+        inline constexpr float PROJ_FOVY_MAX = 115;
+        inline constexpr float PROJ_FOVY_MIN = 45;
+    }
 }
