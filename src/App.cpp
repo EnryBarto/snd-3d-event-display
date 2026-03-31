@@ -11,7 +11,6 @@
 namespace snd3D {
 
     App::App() {
-
         this->windowManager = std::make_unique<WindowManager>(
             snd3D::constants::window::DEFAULT_WIDTH,
             snd3D::constants::window::DEFAULT_HEIGHT,
@@ -26,9 +25,11 @@ namespace snd3D {
     void App::run() {
 
         // Game Loop
-        while (!glfwWindowShouldClose(this->windowManager->getWindow())) {
+        while (this->stateManager.getCurrentState() != AppState::CLOSED) {
             glfwPollEvents();
+            if (glfwWindowShouldClose(this->windowManager->getWindow())) this->stateManager.close();
 
+            this->stateManager.update();
             this->scene->update();
 
             // Start ImGui Frame
@@ -43,7 +44,6 @@ namespace snd3D {
 
             // Rendering
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             scene->render();
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
