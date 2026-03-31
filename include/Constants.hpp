@@ -16,4 +16,8 @@ namespace snd3D::constants {
         inline constexpr float PROJ_FOVY_MAX = 115;
         inline constexpr float PROJ_FOVY_MIN = 45;
     }
+
+    namespace paths {
+        inline constexpr const char* SHADER_FOLDER = "assets/shaders/";
+    }
 }
