@@ -17,10 +17,10 @@ namespace snd3D {
             snd3D::constants::window::DEFAULT_HEIGHT,
             snd3D::constants::window::NAME,
             snd3D::constants::window::DEFAULT_VSYNC,
-            new Callbacks(this)
+            new Callbacks(*this)
         );
 
-        this->scene = std::make_unique<Scene>();
+        this->scene = std::make_unique<Scene>(*this->windowManager);
 	}
 
     void App::run() {
@@ -28,7 +28,8 @@ namespace snd3D {
         // Game Loop
         while (!glfwWindowShouldClose(this->windowManager->getWindow())) {
             glfwPollEvents();
-            if (glfwGetKey(windowManager->getWindow(), GLFW_KEY_F11)) this->windowManager->toggleFullScreen();
+
+            this->scene->update();
 
             // Start ImGui Frame
             ImGui_ImplOpenGL3_NewFrame();

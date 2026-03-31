@@ -7,6 +7,9 @@
 
 namespace snd3D {
 	class App {
+
+		friend class Callbacks; // Needs access to the window manager
+
 		public:
 			App();
 			void run();

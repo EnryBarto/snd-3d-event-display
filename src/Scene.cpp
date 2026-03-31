@@ -8,9 +8,9 @@
 
 namespace snd3D {
 
-    Scene::Scene() {
+    Scene::Scene(WindowManager& winMan) : windowManager(winMan) {
         this->camera = std::make_unique<Camera>(glm::vec3(400.0f), glm::vec3(0.0f, 0.0f, 554.0f));
-        this->projection = std::make_unique<Projection>(2.0f, 80.0f);
+        this->projection = std::make_unique<Projection>(this->windowManager.getAspectRatio(), 80.0f);
 
         Assimp::Importer importer;
         const aiScene* scene = importer.ReadFile("assets/geometries/SND.gltf",
@@ -28,6 +28,10 @@ namespace snd3D {
         this->obj = std::make_unique<Object>(scene);
         std::shared_ptr<snd3D::Shader> flat = std::make_shared<snd3D::Shader>("Flat", "flat.vert", "flat.frag");
         obj->setShader(flat);
+    }
+
+    void Scene::update() {
+        if (this->windowManager.isFramebufferChanged()) this->projection->changeAspectRatio(this->windowManager.getAspectRatio());
     }
 
     void Scene::render() {

@@ -49,7 +49,12 @@ namespace snd3D {
         ImGui_ImplOpenGL3_Init("#version 330 core");
 
         // Bind callbacks
-        glfwSetWindowUserPointer(this->window, callbacksHandler);
+        glfwSetWindowUserPointer(this->window, callbacksHandler); // Save the callbacks object instance into the window
+        glfwSetCursorPosCallback(this->window, Callbacks::cursorPosition);
+        glfwSetKeyCallback(this->window, Callbacks::keyAction);
+        glfwSetMouseButtonCallback(this->window, Callbacks::mouseButton);
+        glfwSetFramebufferSizeCallback(this->window, Callbacks::framebufferSize);
+        glfwSetScrollCallback(this->window, Callbacks::scroll);
     }
 
     WindowManager::~WindowManager() {
@@ -101,6 +106,30 @@ namespace snd3D {
             glfwSwapInterval(1);
         }
         this->fullScreen = !this->fullScreen;
+    }
+
+    void WindowManager::frameBufferChanged() {
+        // We want to use the full screen but mantaining the proportions
+        glm::vec2 res = this->getCurrentResolution();
+        glViewport(0, 0, (int)res.x, (int)res.y);
+        this->framebufferChanged = true;
+    }
+
+    bool WindowManager::isFramebufferChanged() {
+        bool tmp = this->framebufferChanged;
+        this->framebufferChanged = false;
+        return tmp;
+    }
+
+    glm::vec2 WindowManager::getCurrentResolution() {
+        int width, height;
+        glfwGetWindowSize(this->window, &width, &height);
+        return glm::vec2(width, height);
+    }
+
+    float WindowManager::getAspectRatio() {
+        glm::vec2 res = this->getCurrentResolution();
+        return res.x / res.y;
     }
 
     GLFWmonitor* WindowManager::getCurrentMonitor() {
