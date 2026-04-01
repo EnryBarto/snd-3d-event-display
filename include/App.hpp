@@ -2,14 +2,17 @@
 
 #include <memory>
 
+#include "AppStateManager.hpp"
 #include "WindowManager.hpp"
 #include "Scene.hpp"
-#include "AppStateManager.hpp"
+#include "Gui.hpp"
 
 namespace snd3D {
     class App {
 
-        friend class Callbacks; // Needs access to the window manager
+        // They need access to WindowManager and Scene
+        friend class Callbacks;
+        friend class Gui;
 
         public:
             App();
@@ -17,6 +20,7 @@ namespace snd3D {
 
         private:
             AppStateManager stateManager;
+            std::unique_ptr<Gui> guiManager;
             std::unique_ptr<WindowManager> windowManager;
             std::unique_ptr<Scene> scene;
     };

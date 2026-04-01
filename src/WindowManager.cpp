@@ -4,9 +4,6 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 
 #include "Callbacks.hpp"
 
@@ -39,15 +36,6 @@ namespace snd3D {
             throw std::runtime_error("GLAD initialization error");
         }
 
-        // Init ImGui
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
-        io.IniFilename = NULL; // Deactivate ini file
-        ImGui::StyleColorsDark(); // Set ImGUI dark theme
-        ImGui_ImplGlfw_InitForOpenGL(this->window, true);
-        ImGui_ImplOpenGL3_Init("#version 330 core");
-
         // Bind callbacks
         glfwSetWindowUserPointer(this->window, callbacksHandler); // Save the callbacks object instance into the window
         glfwSetCursorPosCallback(this->window, Callbacks::cursorPosition);
@@ -69,10 +57,6 @@ namespace snd3D {
     }
 
     WindowManager::~WindowManager() {
-        // Cleanup
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
         glfwDestroyWindow(this->window);
         glfwTerminate();
     }

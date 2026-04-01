@@ -1,6 +1,7 @@
 #include "Callbacks.hpp"
 
 #include "App.hpp"
+#include "Constants.hpp"
 
 namespace snd3D {
     Callbacks::Callbacks(App& app) : app(app) {
@@ -38,22 +39,39 @@ namespace snd3D {
     void Callbacks::keyAction(int key, int scancode, int action, int mods) {
         if (action == GLFW_RELEASE) return;
 
-        switch (key) {
-            case GLFW_KEY_F11:
-                this->app.windowManager->toggleFullScreen();
-                break;
+        if (mods == 0) { // No control key are pressed
+            switch (key) {
+                case GLFW_KEY_F11:
+                    this->app.windowManager->toggleFullScreen();
+                    break;
 
-            case GLFW_KEY_R:
-                this->app.scene->camera->reset();
-                break;
+                case GLFW_KEY_R:
+                    this->app.scene->camera->reset();
+                    break;
 
-            case GLFW_KEY_V:
-                this->app.windowManager->toggleVsync();
-                break;
+                case GLFW_KEY_V:
+                    this->app.windowManager->toggleVsync();
+                    break;
+            }
+        }
+        else if (mods & GLFW_MOD_CONTROL) { // CTRL pressed
+            switch (key) {
+                case GLFW_KEY_KP_ADD:
+                case GLFW_KEY_EQUAL:
+                    this->app.guiManager->changeFontSize(constants::GUI_FONT_RESIZE_FACTOR);
+                    break;
+
+                case GLFW_KEY_KP_SUBTRACT:
+                case GLFW_KEY_MINUS:
+                    this->app.guiManager->changeFontSize(1 / constants::GUI_FONT_RESIZE_FACTOR);
+                    break;
+            }
         }
     }
 
     void Callbacks::cursorPosition(double currentMousePosX, double currentMousePosY) {
+        if (this->app.guiManager->isPointerOverGui()) return;
+
         switch (this->app.stateManager.getCurrentState()) {
             case AppState::MOVING_TRACKBALL: {
                 this->app.windowManager->currentMousePosition[0] = (int)currentMousePosX;

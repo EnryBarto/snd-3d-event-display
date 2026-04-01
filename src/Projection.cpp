@@ -16,7 +16,7 @@ namespace snd3D {
     }
 
     void Projection::changeAspectRatio(float newAspectRatio) {
-        if (isnan(newAspectRatio)) return;
+        if (std::isnan(newAspectRatio)) return;
         this->aspectRatio = newAspectRatio;
         this->computeProjectionMatrix();
     }

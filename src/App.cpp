@@ -3,9 +3,6 @@
 #include <iostream>
 
 #include <glad/glad.h>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 
 #include "Constants.hpp"
 #include "Callbacks.hpp"
@@ -20,7 +17,7 @@ namespace snd3D {
             snd3D::constants::window::DEFAULT_VSYNC,
             new Callbacks(*this)
         );
-
+        this->guiManager = std::make_unique<Gui>(*this, constants::GUI_FONT_SIZE);
         this->scene = std::make_unique<Scene>(*this->windowManager, this->stateManager);
     }
 
@@ -33,22 +30,12 @@ namespace snd3D {
 
             this->stateManager.update();
             this->scene->update();
-
-            // Start ImGui Frame
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-
-            ImGui::Begin("Info");
-            ImGui::Text("Hello from ImGui!");
-            ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
-            ImGui::End();
+            this->guiManager->update();
 
             // Rendering
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            scene->render();
-            ImGui::Render();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            this->scene->render();
+            this->guiManager->render();
 
             glfwSwapBuffers(this->windowManager->getWindow());
         }
