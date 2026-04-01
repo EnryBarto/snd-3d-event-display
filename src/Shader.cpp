@@ -33,10 +33,11 @@ namespace snd3D {
         return programId;
     }
 
-    void Shader::use(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, Material* material) {
-
+    void Shader::use() {
         glUseProgram(this->programId);
+    }
 
+    void Shader::bindUniforms(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, Material* material) {
         // Check for uniform existence in the active shader; if present, update them
         if (this->uniform_Model != -1) glUniformMatrix4fv(this->uniform_Model, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         if (this->uniform_Projection != -1) glUniformMatrix4fv(this->uniform_Projection, 1, GL_FALSE, glm::value_ptr(projectionMatrix));

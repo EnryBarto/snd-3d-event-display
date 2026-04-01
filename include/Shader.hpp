@@ -14,7 +14,8 @@ namespace snd3D {
             ~Shader();
             std::string getName();
             GLuint getProgramId();
-            void use(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, Material* material);
+            void use();
+            void bindUniforms(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, Material* material);
 
         private:
             std::string name;

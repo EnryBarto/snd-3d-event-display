@@ -17,6 +17,7 @@ namespace snd3D {
 
         private:
             std::unique_ptr<Node> rootNode;
+            std::shared_ptr<Shader> shader;
             glm::mat4 modelMatrix;
             bool active = true;
     };

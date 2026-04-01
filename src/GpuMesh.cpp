@@ -120,7 +120,7 @@ namespace snd3D {
             return;
         }
 
-        this->shader->use(modelMatrix, viewMatrix, projectionMatrix, camPos, material);
+        this->shader->bindUniforms(modelMatrix, viewMatrix, projectionMatrix, camPos, material);
 
         // RENDER!
         glBindVertexArray(this->vao);

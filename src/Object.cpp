@@ -10,7 +10,7 @@
 namespace snd3D {
 
     Object::Object(const aiScene* scene) {
-        this->modelMatrix = glm::mat4(1);
+        this->modelMatrix = glm::mat4(1.0f);
 
         // Load all materials
         std::vector<std::shared_ptr<Material>> materials;
@@ -28,15 +28,19 @@ namespace snd3D {
             meshes.push_back(mesh);
         }
 
-        // Recursively start creating nodes
+        // Recursively start creating nodes and store buffered model matrices
         this->rootNode = std::make_unique<Node>(scene, scene->mRootNode, meshes);
+        this->rootNode->updateGlobalModelMatrix(this->modelMatrix);
     }
 
     void Object::setShader(const std::shared_ptr<Shader>& shader) {
+        this->shader = shader;
         this->rootNode->setShader(shader);
     }
 
     void Object::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {
-        this->rootNode->render(this->modelMatrix, viewMatrix, projectionMatrix, camPos, showAnchor);
+        this->shader->use();
+        // Using the render mode without passing model matrix beacuse we calculated it in the object creation
+        this->rootNode->render(viewMatrix, projectionMatrix, camPos, showAnchor);
     }
 }

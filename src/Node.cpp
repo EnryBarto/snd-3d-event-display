@@ -37,6 +37,14 @@ namespace snd3D {
         }
     }
 
+    void Node::updateGlobalModelMatrix(const glm::mat4& parentModelMatrix) {
+        this->globalModelMatrix = parentModelMatrix * this->localModelMatrix;
+
+        for (auto& node : this->childrenNode) {
+            node->updateGlobalModelMatrix(this->globalModelMatrix);
+        }
+    }
+
     void Node::render(const glm::mat4& parentModelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {
         glm::mat4 modelMatrix = parentModelMatrix * this->localModelMatrix;
 
@@ -46,6 +54,17 @@ namespace snd3D {
 
         for (auto& mesh : this->meshes) {
             mesh->render(modelMatrix, viewMatrix, projectionMatrix, camPos, showAnchor);
+        }
+    }
+
+    void Node::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {
+
+        for (auto& node : this->childrenNode) {
+            node->render(viewMatrix, projectionMatrix, camPos, showAnchor);
+        }
+
+        for (auto& mesh : this->meshes) {
+            mesh->render(this->globalModelMatrix, viewMatrix, projectionMatrix, camPos, showAnchor);
         }
     }
 }

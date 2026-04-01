@@ -30,6 +30,7 @@ namespace snd3D {
         this->obj = std::make_unique<Object>(scene);
         std::shared_ptr<snd3D::Shader> flat = std::make_shared<snd3D::Shader>("Flat", "flat.vert", "flat.frag");
         obj->setShader(flat);
+        flat->use();
     }
 
     void Scene::update() {

@@ -1,5 +1,7 @@
 #include "App.hpp"
 
+#include <iostream>
+
 #include <glad/glad.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
