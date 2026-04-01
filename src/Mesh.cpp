@@ -73,7 +73,7 @@ namespace snd3D {
         this->gpuMesh->setShader(shader);
     }
 
-    void Mesh::render(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {
-        this->gpuMesh->render(modelMatrix, viewMatrix, projectionMatrix, camPos, showAnchor, this->material.get());
+    void Mesh::render(const glm::mat4& modelMatrix, bool showAnchor) {
+        this->gpuMesh->render(modelMatrix, showAnchor, this->material.get());
     }
 }

@@ -25,7 +25,7 @@ namespace snd3D {
             );
             void setModes(GLenum renderMode);
             void setShader(std::shared_ptr<Shader> shader);
-            void render(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor, Material* material);
+            void render(const glm::mat4& modelMatrix, bool showAnchor, Material* material);
 
         private:
             const static uint8_t VERTICES_LAYER = 0;

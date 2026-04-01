@@ -45,26 +45,26 @@ namespace snd3D {
         }
     }
 
-    void Node::render(const glm::mat4& parentModelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {
+    void Node::render(const glm::mat4& parentModelMatrix, bool showAnchor) {
         glm::mat4 modelMatrix = parentModelMatrix * this->localModelMatrix;
 
         for (auto& node : this->childrenNode) {
-            node->render(modelMatrix, viewMatrix, projectionMatrix, camPos, showAnchor);
+            node->render(modelMatrix, showAnchor);
         }
 
         for (auto& mesh : this->meshes) {
-            mesh->render(modelMatrix, viewMatrix, projectionMatrix, camPos, showAnchor);
+            mesh->render(modelMatrix, showAnchor);
         }
     }
 
-    void Node::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {
+    void Node::render(bool showAnchor) {
 
         for (auto& node : this->childrenNode) {
-            node->render(viewMatrix, projectionMatrix, camPos, showAnchor);
+            node->render(showAnchor);
         }
 
         for (auto& mesh : this->meshes) {
-            mesh->render(this->globalModelMatrix, viewMatrix, projectionMatrix, camPos, showAnchor);
+            mesh->render(this->globalModelMatrix, showAnchor);
         }
     }
 }

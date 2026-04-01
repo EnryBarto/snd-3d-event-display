@@ -108,7 +108,7 @@ namespace snd3D {
         this->shader = shader;
     }
 
-    void GpuMesh::render(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor, Material* material) {
+    void GpuMesh::render(const glm::mat4& modelMatrix, bool showAnchor, Material* material) {
 
         if (this->vao == 0) {
             cerr << "ATTENTION!!! VAO not initialized" << endl;
@@ -120,7 +120,7 @@ namespace snd3D {
             return;
         }
 
-        this->shader->bindUniforms(modelMatrix, viewMatrix, projectionMatrix, camPos, material);
+        this->shader->bindLocalUniforms(modelMatrix, material);
 
         // RENDER!
         glBindVertexArray(this->vao);

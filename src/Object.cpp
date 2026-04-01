@@ -40,7 +40,8 @@ namespace snd3D {
 
     void Object::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {
         this->shader->use();
+        this->shader->bindGlobalUniforms(viewMatrix, projectionMatrix, camPos);
         // Using the render mode without passing model matrix beacuse we calculated it in the object creation
-        this->rootNode->render(viewMatrix, projectionMatrix, camPos, showAnchor);
+        this->rootNode->render(showAnchor);
     }
 }

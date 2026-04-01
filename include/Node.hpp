@@ -16,8 +16,8 @@ namespace snd3D {
             Node(const aiScene* scene, aiNode* node, std::vector<std::shared_ptr<Mesh>>& meshes);
             void setShader(const std::shared_ptr<Shader>& shader);
             void updateGlobalModelMatrix(const glm::mat4& parentModelMatrix);
-            void render(const glm::mat4& parentModelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor);
-            void render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor); // Use the buffered model matrix
+            void render(const glm::mat4& parentModelMatrix, bool showAnchor);
+            void render(bool showAnchor); // Use the buffered model matrix
 
         private:
             std::string name;

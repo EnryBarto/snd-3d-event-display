@@ -37,12 +37,15 @@ namespace snd3D {
         glUseProgram(this->programId);
     }
 
-    void Shader::bindUniforms(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, Material* material) {
-        // Check for uniform existence in the active shader; if present, update them
-        if (this->uniform_Model != -1) glUniformMatrix4fv(this->uniform_Model, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+    void Shader::bindGlobalUniforms(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos) {
         if (this->uniform_Projection != -1) glUniformMatrix4fv(this->uniform_Projection, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
         if (this->uniform_View != -1) glUniformMatrix4fv(this->uniform_View, 1, GL_FALSE, glm::value_ptr(viewMatrix));
         if (this->uniform_ViewPos != -1) glUniform3f(this->uniform_ViewPos, camPos.x, camPos.y, camPos.z);
+    }
+
+    void Shader::bindLocalUniforms(const glm::mat4& modelMatrix, Material* material) {
+        // Check for uniform existence in the active shader; if present, update them
+        if (this->uniform_Model != -1) glUniformMatrix4fv(this->uniform_Model, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         if (this->uniform_MaterialAmbient != -1 && material != nullptr) glUniform3fv(this->uniform_MaterialAmbient, 1, glm::value_ptr(material->getAmbient()));
         if (this->uniform_MaterialDiffuse != -1 && material != nullptr) glUniform3fv(this->uniform_MaterialDiffuse, 1, glm::value_ptr(material->getDiffuse()));
         if (this->uniform_MaterialSpecular != -1 && material != nullptr) glUniform3fv(this->uniform_MaterialSpecular, 1, glm::value_ptr(material->getSpecular()));

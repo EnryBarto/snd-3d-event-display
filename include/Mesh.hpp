@@ -16,7 +16,7 @@ namespace snd3D {
             Mesh(aiMesh* mesh, glm::vec4 baseColor = glm::vec4(0.6f, 0.6f, 0.6f, 1.0f));
             void setMaterial(const std::shared_ptr<Material>& material);
             void setShader(const std::shared_ptr<Shader>& shader);
-            void render(const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor);
+            void render(const glm::mat4& modelMatrix, bool showAnchor);
 
         private:
             std::string name;
