@@ -8,13 +8,21 @@ namespace snd3D {
             Camera(glm::vec3 position, glm::vec3 target);
             const glm::mat4& getViewMatrix();
             const glm::vec3& getPosition();
-            void rotateAroundCameraTarget(glm::vec3 axis, float angle);
+            void rotateAroundAxis(glm::vec3 axis, float angle);
+            void rotateByAngles(float deltaAngleX, float deltaAngleY);
+            void rotateTrackball(glm::vec3 origin, glm::vec3 destination);
             void zoom(float offset);
+            void reset();
 
         private:
             glm::vec3 position;  // Camera position in 3D space
             glm::vec3 target;    // Point the camera is looking at
             glm::vec3 upVector;  // Up direction vector for the camera
+
+            // Used to reset to default values
+            glm::vec3 startPosition;
+            glm::vec3 startTarget;
+            glm::vec3 startUpVector;
 
             glm::mat4 viewMatrix; // Buffered view matrix to not recompute it for each frame, but it has to be kept updated
     };

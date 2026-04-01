@@ -42,6 +42,14 @@ namespace snd3D {
             case GLFW_KEY_F11:
                 this->app.windowManager->toggleFullScreen();
                 break;
+
+            case GLFW_KEY_R:
+                this->app.scene->camera->reset();
+                break;
+
+            case GLFW_KEY_V:
+                this->app.windowManager->toggleVsync();
+                break;
         }
     }
 

@@ -6,6 +6,8 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
+#include "Constants.hpp"
+
 namespace snd3D {
 
     Scene::Scene(WindowManager& winMan, AppStateManager& stateMan) : windowManager(winMan), stateManager(stateMan) {
@@ -41,19 +43,17 @@ namespace snd3D {
             glm::vec3 difference = destination - origin;
 
             if (difference != glm::vec3(0)) {
-                // Aproximate the rotation angle with ||destination - origin||
-                float angle = glm::length(difference) * 20;
-
-                // The rotation axis is perpendicular to the origin and destination vector, so the cross product is used
-                glm::vec3 rotationAxis = glm::cross(origin, destination);
-
-                // Rotate the camera
-                this->camera->rotateAroundCameraTarget(rotationAxis, angle);
-                
+                this->camera->rotateTrackball(origin, destination);
+                // Update the last mouse position
                 this->windowManager.lastMousePosition[0] = this->windowManager.currentMousePosition[0];
                 this->windowManager.lastMousePosition[1] = this->windowManager.currentMousePosition[1];
             }
         }
+
+        if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)  camera->rotateByAngles(-constants::ROTATION_SPEED, 0);
+        if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) camera->rotateByAngles(constants::ROTATION_SPEED, 0);
+        if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_UP) == GLFW_PRESS)  camera->rotateByAngles(0, constants::ROTATION_SPEED);
+        if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) camera->rotateByAngles(0, -constants::ROTATION_SPEED);
     }
 
     void Scene::render() {

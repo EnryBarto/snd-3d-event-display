@@ -26,4 +26,5 @@ namespace snd3D::constants {
 
     inline constexpr int ANCHOR_SIZE = 15;
     inline constexpr float ZOOM_FACTOR = 0.1f;
+    inline constexpr float ROTATION_SPEED = 2;
 }
