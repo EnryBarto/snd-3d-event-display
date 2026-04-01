@@ -1,5 +1,7 @@
 #include "Projection.hpp"
 
+#include <cmath>
+
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Constants.hpp"
@@ -14,6 +16,7 @@ namespace snd3D {
     }
 
     void Projection::changeAspectRatio(float newAspectRatio) {
+        if (isnan(newAspectRatio)) return;
         this->aspectRatio = newAspectRatio;
         this->computeProjectionMatrix();
     }
