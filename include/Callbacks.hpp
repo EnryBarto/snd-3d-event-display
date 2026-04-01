@@ -16,6 +16,7 @@ namespace snd3D {
             static void mouseButton(GLFWwindow* window, int button, int action, int mods);
             static void framebufferSize(GLFWwindow* window, int newWidth, int newHeight);
             static void scroll(GLFWwindow* window, double xOffset, double yOffset);
+            static void close(GLFWwindow* window);
 
         private:
             App& app; // Keep reference to App object to handle events
@@ -26,5 +27,6 @@ namespace snd3D {
             void mouseButton(int button, int action, int mods);
             void framebufferSize(int newWidth, int newHeight);
             void scroll(double xOffset, double yOffset);
+            void close();
     };
 }

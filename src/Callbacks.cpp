@@ -34,6 +34,11 @@ namespace snd3D {
         if (callbackInstance) callbackInstance->scroll(xOffset, yOffset);
     }
 
+    void Callbacks::close(GLFWwindow* window) {
+        Callbacks* callbackInstance = static_cast<Callbacks*>(glfwGetWindowUserPointer(window));
+        if (callbackInstance) callbackInstance->close();
+    }
+
     /* ---------- INSTANCE METHODS ----------*/
 
     void Callbacks::keyAction(int key, int scancode, int action, int mods) {
@@ -112,5 +117,9 @@ namespace snd3D {
 
     void Callbacks::scroll(double xOffset, double yOffset) {
         this->app.scene->camera->zoom(yOffset);
+    }
+
+    void Callbacks::close() {
+        this->app.stateManager.close();
     }
 }

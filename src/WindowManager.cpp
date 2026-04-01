@@ -43,6 +43,7 @@ namespace snd3D {
         glfwSetMouseButtonCallback(this->window, Callbacks::mouseButton);
         glfwSetFramebufferSizeCallback(this->window, Callbacks::framebufferSize);
         glfwSetScrollCallback(this->window, Callbacks::scroll);
+        glfwSetWindowCloseCallback(window, Callbacks::close);
 
         // Enable transparency management and depth test
         glEnable(GL_BLEND);
