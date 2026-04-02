@@ -13,7 +13,7 @@ namespace snd3D::constants {
         inline constexpr float GUI_FONT_SIZE_MIN = 0.75f;
     }
 
-    namespace default {
+    namespace defaults {
         inline constexpr float PROJ_FOVY = 80;
         inline constexpr bool SHOW_PIVOT = true;
 

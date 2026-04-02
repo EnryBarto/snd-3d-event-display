@@ -93,6 +93,8 @@ namespace snd3D {
     }
 
     void Callbacks::mouseButton(int button, int action, int mods) {
+        if (this->app.guiManager->isPointerOverGui() && action != GLFW_RELEASE) return; // Don't start new actions if the pointer is over the gui
+
         // Retrieve mouse position
         double xPos, yPos;
         glfwGetCursorPos(this->app.windowManager->getWindow(), &xPos, &yPos);

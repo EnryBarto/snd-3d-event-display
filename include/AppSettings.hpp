@@ -9,6 +9,6 @@ namespace snd3D {
             void toggleCameraPivot();
 
         private:
-            bool cameraPivotActive = constants::default::SHOW_PIVOT;
+            bool cameraPivotActive = constants::defaults::SHOW_PIVOT;
     };
 }
