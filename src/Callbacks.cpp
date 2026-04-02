@@ -50,6 +50,10 @@ namespace snd3D {
                     this->app.windowManager->toggleFullScreen();
                     break;
 
+                case GLFW_KEY_P:
+                    this->app.settings.toggleCameraPivot();
+                    break;
+
                 case GLFW_KEY_R:
                     this->app.scene->camera->reset();
                     break;
@@ -63,12 +67,12 @@ namespace snd3D {
             switch (key) {
                 case GLFW_KEY_KP_ADD:
                 case GLFW_KEY_EQUAL:
-                    this->app.guiManager->changeFontSize(constants::GUI_FONT_RESIZE_FACTOR);
+                    this->app.guiManager->changeFontSize(constants::factors::GUI_FONT_RESIZE);
                     break;
 
                 case GLFW_KEY_KP_SUBTRACT:
                 case GLFW_KEY_MINUS:
-                    this->app.guiManager->changeFontSize(1 / constants::GUI_FONT_RESIZE_FACTOR);
+                    this->app.guiManager->changeFontSize(1 / constants::factors::GUI_FONT_RESIZE);
                     break;
             }
         }

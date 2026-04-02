@@ -2,15 +2,17 @@
 
 #include <iostream>
 
+#include <glm/gtc/matrix_transform.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
 #include "Constants.hpp"
+#include "ObjectFactory.hpp"
 
 namespace snd3D {
 
-    Scene::Scene(WindowManager& winMan, AppStateManager& stateMan) : windowManager(winMan), stateManager(stateMan) {
+    Scene::Scene(WindowManager& winMan, AppStateManager& stateMan, AppSettings& appSettings) : windowManager(winMan), stateManager(stateMan), settings(appSettings) {
         this->camera = std::make_unique<Camera>(glm::vec3(400.0f), glm::vec3(0.0f, 0.0f, 554.0f));
         this->projection = std::make_unique<Projection>(this->windowManager.getAspectRatio(), 80.0f);
 
@@ -27,10 +29,14 @@ namespace snd3D {
         }
 
         // Debug object
-        this->obj = std::make_unique<Object>(scene);
+        this->detector = std::make_unique<Object>(scene);
         std::shared_ptr<snd3D::Shader> flat = std::make_shared<snd3D::Shader>("Flat", "flat.vert", "flat.frag");
-        obj->setShader(flat);
+        this->detector->setShader(flat);
         flat->use();
+
+        auto factory = ObjectFactory();
+        this->pivot = std::unique_ptr<Object>(factory.getSphere());
+        this->pivot->setShader(flat);
     }
 
     void Scene::update() {
@@ -51,14 +57,23 @@ namespace snd3D {
             }
         }
 
-        if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)  camera->rotateByAngles(-constants::ROTATION_SPEED, 0);
-        if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) camera->rotateByAngles(constants::ROTATION_SPEED, 0);
-        if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_UP) == GLFW_PRESS)  camera->rotateByAngles(0, constants::ROTATION_SPEED);
-        if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) camera->rotateByAngles(0, -constants::ROTATION_SPEED);
+        if (this->camera->isChanged()) {
+            if (this->settings.isCameraPivotActive()) { // Calculations are performed only if the pivot is active
+                glm::mat4 matrix = glm::translate(glm::mat4(1.0f), this->camera->getTarget());
+                matrix = glm::scale(matrix, glm::vec3(constants::sizes::PIVOT));
+                this->pivot->updateModelMatrix(matrix);
+            }
+        }
+
+        if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)  camera->rotateByAngles(-constants::factors::ROTATION_SPEED, 0);
+        if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) camera->rotateByAngles(constants::factors::ROTATION_SPEED, 0);
+        if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_UP) == GLFW_PRESS)  camera->rotateByAngles(0, constants::factors::ROTATION_SPEED);
+        if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) camera->rotateByAngles(0, -constants::factors::ROTATION_SPEED);
     }
 
     void Scene::render() {
-        this->obj->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
+        this->detector->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
+        if (this->settings.isCameraPivotActive()) this->pivot->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
     }
 
     glm::vec3 Scene::cursorToUnitSphere(int x, int y) {

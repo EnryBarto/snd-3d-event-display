@@ -15,7 +15,7 @@ namespace snd3D {
         this->sphere = shared_ptr<Mesh>(ObjectFactory::createSphere());
     }
 
-    Object* ObjectFactory::getSphere(glm::vec4 baseColor) {
+    Object* ObjectFactory::getSphere() {
         vector<shared_ptr<Mesh>> meshes;
         meshes.push_back(this->sphere);
         Node* node = new Node("Sphere", meshes);

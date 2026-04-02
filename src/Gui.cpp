@@ -62,10 +62,10 @@ namespace snd3D {
             }
             if (ImGui::BeginMenu("Settings")) {
                 if (ImGui::MenuItem("Font +", "Ctrl + +")) {
-                    this->changeFontSize(constants::GUI_FONT_RESIZE_FACTOR);
+                    this->changeFontSize(constants::factors::GUI_FONT_RESIZE);
                 }
                 if (ImGui::MenuItem("Font -", "Ctrl + -")) {
-                    this->changeFontSize(1 / constants::GUI_FONT_RESIZE_FACTOR);
+                    this->changeFontSize(1 / constants::factors::GUI_FONT_RESIZE);
                 }
                 bool vsyncEnabled = this->app.windowManager->isVsyncActive();
                 if (ImGui::MenuItem("V-Sync", "V", vsyncEnabled)) {
@@ -78,24 +78,29 @@ namespace snd3D {
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Camera")) {
+                bool pivot = this->app.settings.isCameraPivotActive();
+                if (ImGui::MenuItem("Show Pivot", "P", pivot)) {
+                    this->app.settings.toggleCameraPivot();
+                }
+                ImGui::Separator();
                 if (ImGui::MenuItem("Zoom In", "Scroll Up")) {
-                    this->app.scene->camera->zoom(constants::ZOOM_FACTOR);
+                    this->app.scene->camera->zoom(constants::factors::ZOOM);
                 }
                 if (ImGui::MenuItem("Zoom Out", "Scoll Down")) {
-                    this->app.scene->camera->zoom(-constants::ZOOM_FACTOR);
+                    this->app.scene->camera->zoom(-constants::factors::ZOOM);
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Move Right", "Right")) {
-                    this->app.scene->camera->rotateByAngles(constants::ROTATION_SPEED, 0);
+                    this->app.scene->camera->rotateByAngles(constants::factors::ROTATION_SPEED, 0);
                 }
                 if (ImGui::MenuItem("Move Left", "Left")) {
-                    this->app.scene->camera->rotateByAngles(-constants::ROTATION_SPEED, 0);
+                    this->app.scene->camera->rotateByAngles(-constants::factors::ROTATION_SPEED, 0);
                 }
                 if (ImGui::MenuItem("Move Up", "Up")) {
-                    this->app.scene->camera->rotateByAngles(0, constants::ROTATION_SPEED);
+                    this->app.scene->camera->rotateByAngles(0, constants::factors::ROTATION_SPEED);
                 }
                 if (ImGui::MenuItem("Move Down", "Down")) {
-                    this->app.scene->camera->rotateByAngles(0, -constants::ROTATION_SPEED);
+                    this->app.scene->camera->rotateByAngles(0, -constants::factors::ROTATION_SPEED);
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Reset", "R")) {

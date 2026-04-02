@@ -26,6 +26,10 @@ namespace snd3D {
         return this->position;
     }
 
+    const glm::vec3& Camera::getTarget() {
+        return this->target;
+    }
+
     void Camera::rotateTrackball(vec3 origin, vec3 destination) {
         vec3 rotationAxis = glm::cross(origin, destination);
         if (glm::length(rotationAxis) == 0.0f) return;
@@ -66,7 +70,7 @@ namespace snd3D {
 
         // New absolute position
         this->position = this->target + rotated;
-        this->viewMatrix = lookAt(this->position, this->target, this->upVector);
+        this->recomputeMatrix();
     }
 
     void Camera::rotateByAngles(float deltaAngleX, float deltaAngleY) {
@@ -97,7 +101,7 @@ namespace snd3D {
 
         // Apply the rotation
         this->position = target + viewDirection;
-        this->viewMatrix = lookAt(this->position, this->target, this->upVector);
+        this->recomputeMatrix();
     }
 
     void Camera::zoom(float offset) {
@@ -108,14 +112,24 @@ namespace snd3D {
         if (offset > 0 && distance < constants::limits::ZOOM_DISTANCE_MIN) return;
 
         // Move
-        this->position += normalize(direction) * offset * (distance * constants::ZOOM_FACTOR);
-        this->viewMatrix = lookAt(this->position, this->target, this->upVector);
+        this->position += normalize(direction) * offset * (distance * constants::factors::ZOOM);
+        this->recomputeMatrix();
+    }
+
+    bool Camera::isChanged() {
+        bool tmp = this->changed;
+        this->changed = false;
+        return tmp;
     }
 
     void Camera::reset() {
         this->position = this->startPosition;
         this->target = this->startTarget;
         this->upVector = this->startUpVector;
+        this->recomputeMatrix();
+    }
+    void Camera::recomputeMatrix() {
         this->viewMatrix = lookAt(this->position, this->target, this->upVector);
+        this->changed = true;
     }
 }

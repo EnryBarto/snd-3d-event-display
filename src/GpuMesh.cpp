@@ -127,7 +127,7 @@ namespace snd3D {
         glDrawElements(this->drawMode, this->numIndices, GL_UNSIGNED_INT, 0);
 
         if (showAnchor) {
-            glPointSize(constants::ANCHOR_SIZE);
+            glPointSize(constants::sizes::ANCHOR);
             glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, BUFFER_OFFSET(this->numIndices * sizeof(GLuint)));
         }
     }

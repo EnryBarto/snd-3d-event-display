@@ -5,8 +5,9 @@
 #include <glm/glm.hpp>
 
 #include "Camera.hpp"
-#include "Projection.hpp"
 #include "Object.hpp"
+#include "Projection.hpp"
+#include "AppSettings.hpp"
 #include "WindowManager.hpp"
 #include "AppStateManager.hpp"
 
@@ -18,16 +19,21 @@ namespace snd3D {
         friend class Gui;
 
         public:
-            Scene(WindowManager& winMan, AppStateManager& stateMan);
+            Scene(WindowManager& winMan, AppStateManager& stateMan, AppSettings& stgs);
             void update();
             void render();
 
         private:
-            WindowManager& windowManager; // Owned by App, keep reference to spped up access
-            AppStateManager& stateManager; // Owned by App, keep reference to spped up access
             std::unique_ptr<Camera> camera;
             std::unique_ptr<Projection> projection;
-            std::unique_ptr<Object> obj;
+            std::unique_ptr<Object> detector;
+            std::unique_ptr<Object> pivot;
+
+            // Owned by App, keep reference to spped up access
+            AppSettings& settings;
+            WindowManager& windowManager;
+            AppStateManager& stateManager;
+
             glm::vec3 cursorToUnitSphere(int x, int y);
     };
 }

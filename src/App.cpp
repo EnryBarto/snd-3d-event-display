@@ -11,14 +11,14 @@ namespace snd3D {
 
     App::App() {
         this->windowManager = std::make_unique<WindowManager>(
-            snd3D::constants::window::DEFAULT_WIDTH,
-            snd3D::constants::window::DEFAULT_HEIGHT,
-            snd3D::constants::window::NAME,
-            snd3D::constants::window::DEFAULT_VSYNC,
+            snd3D::constants::default::window::WIDTH,
+            snd3D::constants::default::window::HEIGHT,
+            snd3D::constants::default::window::NAME,
+            snd3D::constants::default::window::VSYNC,
             new Callbacks(*this)
         );
-        this->guiManager = std::make_unique<Gui>(*this, constants::GUI_FONT_SIZE);
-        this->scene = std::make_unique<Scene>(*this->windowManager, this->stateManager);
+        this->guiManager = std::make_unique<Gui>(*this, constants::sizes::GUI_FONT);
+        this->scene = std::make_unique<Scene>(*this->windowManager, this->stateManager, this->settings);
     }
 
     void App::run() {

@@ -8,10 +8,12 @@ namespace snd3D {
             Camera(glm::vec3 position, glm::vec3 target);
             const glm::mat4& getViewMatrix();
             const glm::vec3& getPosition();
+            const glm::vec3& getTarget();
             void rotateAroundAxis(glm::vec3 axis, float angle);
             void rotateByAngles(float deltaAngleX, float deltaAngleY);
             void rotateTrackball(glm::vec3 origin, glm::vec3 destination);
             void zoom(float offset);
+            bool isChanged();
             void reset();
 
         private:
@@ -25,6 +27,8 @@ namespace snd3D {
             glm::vec3 startUpVector;
 
             glm::mat4 viewMatrix; // Buffered view matrix to not recompute it for each frame, but it has to be kept updated
+            bool changed;
+            void recomputeMatrix(); // Use it to recompute the buffered matrix, because it updates the changed flag
     };
 
 }
