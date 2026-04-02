@@ -27,6 +27,17 @@ namespace snd3D {
         }
     }
 
+    Node::Node(std::string name, std::vector<std::shared_ptr<Mesh>>& meshes) {
+        this->name = name;
+        this->localModelMatrix = glm::mat4(1.0f);
+        this->globalModelMatrix = glm::mat4(1.0f);
+
+        // Get the reference to all the meshes passed
+        for (auto mesh : meshes) {
+            this->meshes.push_back(mesh);
+        }
+    }
+
     void Node::setShader(const std::shared_ptr<Shader>& shader) {
         for (auto& node : this->childrenNode) {
             node->setShader(shader);

@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <assimp/color4.h>
+#include <glm/ext/matrix_transform.hpp>
 
 #include "Material.hpp"
 #include "Mesh.hpp"
@@ -10,8 +11,6 @@
 namespace snd3D {
 
     Object::Object(const aiScene* scene) {
-        this->modelMatrix = glm::mat4(1.0f);
-
         // Load all materials
         std::vector<std::shared_ptr<Material>> materials;
         for (unsigned int i = 0; i < scene->mNumMaterials; i++) {
@@ -33,9 +32,18 @@ namespace snd3D {
         this->rootNode->updateGlobalModelMatrix(this->modelMatrix);
     }
 
+    Object::Object(Node* rootNode) {
+        this->rootNode = std::unique_ptr<Node>(rootNode);
+    }
+
     void Object::setShader(const std::shared_ptr<Shader>& shader) {
         this->shader = shader;
         this->rootNode->setShader(shader);
+    }
+
+    void Object::updateModelMatrix(const glm::mat4& modelMatrix) {
+        this->modelMatrix = modelMatrix;
+        this->rootNode->updateGlobalModelMatrix(this->modelMatrix);
     }
 
     void Object::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {

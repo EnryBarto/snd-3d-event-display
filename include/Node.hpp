@@ -14,6 +14,7 @@ namespace snd3D {
     class Node {
         public:
             Node(const aiScene* scene, aiNode* node, std::vector<std::shared_ptr<Mesh>>& meshes);
+            Node(std::string name, std::vector<std::shared_ptr<Mesh>>& meshes);
             void setShader(const std::shared_ptr<Shader>& shader);
             void updateGlobalModelMatrix(const glm::mat4& parentModelMatrix);
             void render(const glm::mat4& parentModelMatrix, bool showAnchor);

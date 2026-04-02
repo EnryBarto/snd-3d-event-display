@@ -9,6 +9,12 @@ using namespace glm;
 
 namespace snd3D {
 
+    Mesh::Mesh(string name, vector<vec3>& vertices, vector<vec4>& colors, vector<vec3>& normals, vector<GLuint>& indices, vec4 baseColor) {
+        this->name = name;
+        this->gpuMesh = make_unique<GpuMesh>();
+        this->gpuMesh->initBuffers(vertices, colors, normals, indices, vertices[0]);
+    }
+
     Mesh::Mesh(aiMesh* mesh, vec4 baseColor) {
         vector<vec3> vertices;
         vector<vec4> colors;
