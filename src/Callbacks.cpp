@@ -44,7 +44,20 @@ namespace snd3D {
     void Callbacks::keyAction(int key, int scancode, int action, int mods) {
         if (action != GLFW_PRESS && (key != GLFW_KEY_LEFT_SHIFT && key != GLFW_KEY_RIGHT_SHIFT)) return;
 
-        if (mods == 0) { // No control key are pressed
+        if (mods & GLFW_MOD_CONTROL) { // CTRL pressed
+            switch (key) {
+                case GLFW_KEY_KP_ADD:
+                case GLFW_KEY_EQUAL:
+                    this->app.guiManager->changeFontSize(constants::factors::GUI_FONT_RESIZE);
+                    break;
+
+                case GLFW_KEY_KP_SUBTRACT:
+                case GLFW_KEY_MINUS:
+                    this->app.guiManager->changeFontSize(1 / constants::factors::GUI_FONT_RESIZE);
+                    break;
+            }
+        }
+        else if (mods == 0) { // No control keys are pressed
             switch (key) {
                 case GLFW_KEY_F11:
                     this->app.windowManager->toggleFullScreen();
@@ -61,33 +74,15 @@ namespace snd3D {
                 case GLFW_KEY_V:
                     this->app.windowManager->toggleVsync();
                     break;
-
-                case GLFW_KEY_LEFT_SHIFT:
-                case GLFW_KEY_RIGHT_SHIFT:
-                    if (action == GLFW_RELEASE) this->app.stateManager.shiftReleased();
-                    break;
             }
         }
-        else if (mods & GLFW_MOD_CONTROL) { // CTRL pressed
-            switch (key) {
-                case GLFW_KEY_KP_ADD:
-                case GLFW_KEY_EQUAL:
-                    this->app.guiManager->changeFontSize(constants::factors::GUI_FONT_RESIZE);
-                    break;
 
-                case GLFW_KEY_KP_SUBTRACT:
-                case GLFW_KEY_MINUS:
-                    this->app.guiManager->changeFontSize(1 / constants::factors::GUI_FONT_RESIZE);
-                    break;
-            }
-        }
-        else if (mods & GLFW_MOD_SHIFT) {
-            switch (key) {
-                case GLFW_KEY_LEFT_SHIFT:
-                case GLFW_KEY_RIGHT_SHIFT:
-                    if (action == GLFW_PRESS) this->app.stateManager.shiftPressed();
-                    break;
-            }
+        switch (key) { // Actions to be performed regardless of which control keys are pressed
+            case GLFW_KEY_LEFT_SHIFT:
+            case GLFW_KEY_RIGHT_SHIFT:
+                if (action == GLFW_PRESS) this->app.stateManager.shiftPressed();
+                else if (action == GLFW_RELEASE) this->app.stateManager.shiftReleased();
+                break;
         }
     }
 
