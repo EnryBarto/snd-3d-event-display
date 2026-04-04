@@ -12,6 +12,8 @@ namespace snd3D {
             void rotateAroundAxis(glm::vec3 axis, float angle);
             void rotateByAngles(float deltaAngleX, float deltaAngleY);
             void rotateTrackball(glm::vec3 origin, glm::vec3 destination);
+            void moveParallel(float deltaX, float deltaY);
+            void movePerpendicular(float deltaX, float deltaY);
             void zoom(float offset);
             bool isChanged();
             void reset();

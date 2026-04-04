@@ -1,6 +1,5 @@
 #include "Camera.hpp"
 
-
 #include <cmath>
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -46,6 +45,25 @@ namespace snd3D {
 
         // Rotate the camera around its target using the computed world-space axis
         this->rotateAroundAxis(worldAxis, angle);
+    }
+
+    void Camera::moveParallel(float deltaX, float deltaY) {
+        vec3 direction = normalize(this->target - this->position);
+        vec3 right = normalize(cross(direction, this->upVector));
+        vec3 up = normalize(cross(right, direction));
+
+        this->position += up * deltaY + right * deltaX;
+        this->target += up * deltaY + right * deltaX;
+        this->recomputeMatrix();
+    }
+
+    void Camera::movePerpendicular(float deltaX, float deltaY) {
+        vec3 direction = normalize(this->target - this->position);
+        vec3 right = normalize(cross(direction, this->upVector));
+
+        this->position += direction * deltaY + right * deltaX;
+        this->target += direction * deltaY + right * deltaX;
+        this->recomputeMatrix();
     }
 
     void Camera::rotateAroundAxis(vec3 axis, float angle) {
@@ -107,12 +125,13 @@ namespace snd3D {
     void Camera::zoom(float offset) {
         vec3 direction = target - position;
         float distance = length(direction);
+        float value = offset * distance * constants::factors::ZOOM; // Make zoom speed proportional to the distance from the target
 
         // Don't exceed target
-        if (offset > 0 && distance < constants::limits::ZOOM_DISTANCE_MIN) return;
+        if ((distance - value) < constants::limits::ZOOM_DISTANCE_MIN) return;
 
         // Move
-        this->position += normalize(direction) * offset * (distance * constants::factors::ZOOM);
+        this->position += normalize(direction) * value;
         this->recomputeMatrix();
     }
 

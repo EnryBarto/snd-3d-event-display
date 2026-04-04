@@ -41,24 +41,38 @@ namespace snd3D {
 
     void Scene::update() {
         if (this->windowManager.isFramebufferChanged()) this->projection->changeAspectRatio(this->windowManager.getAspectRatio());
-        if (this->stateManager.getCurrentState() == AppState::MOVING_TRACKBALL) {
-            // Get the two positions on the unit sphere
-            glm::vec3 destination = this->cursorToUnitSphere(this->windowManager.currentMousePosition[0], this->windowManager.currentMousePosition[1]);
-            glm::vec3 origin = this->cursorToUnitSphere(this->windowManager.lastMousePosition[0], this->windowManager.lastMousePosition[1]);
 
-            // Calculate the vector joining the two points
-            glm::vec3 difference = destination - origin;
+        // Calculation are made here beacuse in the callbacks they would be execute too many times, slowing down the reactivity
+        switch (this->stateManager.getCurrentState()) {
+            case AppState::MOVING_PAN: {
+                float deltaX = this->windowManager.lastMousePosition[0] - this->windowManager.currentMousePosition[0];
+                float deltaY = this->windowManager.currentMousePosition[1] - this->windowManager.lastMousePosition[1];
 
-            if (difference != glm::vec3(0)) {
-                this->camera->rotateTrackball(origin, destination);
+                this->camera->moveParallel(deltaX, deltaY);
                 // Update the last mouse position
                 this->windowManager.lastMousePosition[0] = this->windowManager.currentMousePosition[0];
                 this->windowManager.lastMousePosition[1] = this->windowManager.currentMousePosition[1];
-            }
+            } break;
+
+            case AppState::MOVING_TRACKBALL: {
+                // Get the two positions on the unit sphere
+                glm::vec3 destination = this->cursorToUnitSphere(this->windowManager.currentMousePosition[0], this->windowManager.currentMousePosition[1]);
+                glm::vec3 origin = this->cursorToUnitSphere(this->windowManager.lastMousePosition[0], this->windowManager.lastMousePosition[1]);
+
+                // Calculate the vector joining the two points
+                glm::vec3 difference = destination - origin;
+
+                if (difference != glm::vec3(0)) {
+                    this->camera->rotateTrackball(origin, destination);
+                    // Update the last mouse position
+                    this->windowManager.lastMousePosition[0] = this->windowManager.currentMousePosition[0];
+                    this->windowManager.lastMousePosition[1] = this->windowManager.currentMousePosition[1];
+                }
+            } break;
         }
 
-        if (this->camera->isChanged()) {
-            if (this->settings.isCameraPivotActive()) { // Calculations are performed only if the pivot is active
+        if (this->settings.isCameraPivotActive()) { // Calculations are performed only if the pivot is active
+            if (this->camera->isChanged()) {
                 glm::mat4 matrix = glm::translate(glm::mat4(1.0f), this->camera->getTarget());
                 matrix = glm::scale(matrix, glm::vec3(constants::sizes::PIVOT));
                 this->pivot->updateModelMatrix(matrix);

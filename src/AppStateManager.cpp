@@ -30,4 +30,48 @@ namespace snd3D {
                 break;
         }
     }
+
+    void AppStateManager::shiftPressed() {
+        switch (this->currentState) {
+            case AppState::TRACKBALL:
+                this->nextState = AppState::PAN;
+                break;
+
+            case AppState::MOVING_TRACKBALL:
+                this->nextState = AppState::MOVING_PAN;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    void AppStateManager::shiftReleased() {
+        switch (this->currentState) {
+            case AppState::PAN:
+                this->nextState = AppState::TRACKBALL;
+                break;
+
+            case AppState::MOVING_PAN:
+                this->nextState = AppState::MOVING_TRACKBALL;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    void AppStateManager::toggleMovingPan() {
+        switch (this->currentState) {
+            case AppState::PAN:
+                this->nextState = AppState::MOVING_PAN;
+                break;
+            case AppState::MOVING_PAN:
+                this->nextState = AppState::PAN;
+                break;
+            default:
+                std::cerr << "ERROR! Toggle moving pan not allowed in state: " << appStateToString(this->currentState) << std::endl;
+                break;
+        }
+    }
 }

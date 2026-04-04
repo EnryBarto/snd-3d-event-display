@@ -42,7 +42,7 @@ namespace snd3D {
     /* ---------- INSTANCE METHODS ----------*/
 
     void Callbacks::keyAction(int key, int scancode, int action, int mods) {
-        if (action == GLFW_RELEASE) return;
+        if (action != GLFW_PRESS && (key != GLFW_KEY_LEFT_SHIFT && key != GLFW_KEY_RIGHT_SHIFT)) return;
 
         if (mods == 0) { // No control key are pressed
             switch (key) {
@@ -61,6 +61,11 @@ namespace snd3D {
                 case GLFW_KEY_V:
                     this->app.windowManager->toggleVsync();
                     break;
+
+                case GLFW_KEY_LEFT_SHIFT:
+                case GLFW_KEY_RIGHT_SHIFT:
+                    if (action == GLFW_RELEASE) this->app.stateManager.shiftReleased();
+                    break;
             }
         }
         else if (mods & GLFW_MOD_CONTROL) { // CTRL pressed
@@ -76,16 +81,25 @@ namespace snd3D {
                     break;
             }
         }
+        else if (mods & GLFW_MOD_SHIFT) {
+            switch (key) {
+                case GLFW_KEY_LEFT_SHIFT:
+                case GLFW_KEY_RIGHT_SHIFT:
+                    if (action == GLFW_PRESS) this->app.stateManager.shiftPressed();
+                    break;
+            }
+        }
     }
 
     void Callbacks::cursorPosition(double currentMousePosX, double currentMousePosY) {
         if (this->app.guiManager->isPointerOverGui()) return;
 
         switch (this->app.stateManager.getCurrentState()) {
-            case AppState::MOVING_TRACKBALL: {
+            case AppState::MOVING_TRACKBALL:
+            case AppState::MOVING_PAN:
                 this->app.windowManager->currentMousePosition[0] = (int)currentMousePosX;
                 this->app.windowManager->currentMousePosition[1] = (int)currentMousePosY;
-            } break;
+            break;
 
             default:
                 break;
@@ -109,9 +123,26 @@ namespace snd3D {
                     this->app.stateManager.toggleMovingTrackball();
                 }
                 break;
+
             case AppState::MOVING_TRACKBALL:
                 if (action == GLFW_RELEASE) {
                     this->app.stateManager.toggleMovingTrackball();
+                }
+                break;
+
+            case AppState::PAN:
+                if (action == GLFW_PRESS) {
+                    this->app.windowManager->lastMousePosition[0] = (int)xPos;
+                    this->app.windowManager->lastMousePosition[1] = (int)yPos;
+                    this->app.windowManager->currentMousePosition[0] = (int)xPos;
+                    this->app.windowManager->currentMousePosition[1] = (int)yPos;
+                    this->app.stateManager.toggleMovingPan();
+                }
+                break;
+
+            case AppState::MOVING_PAN:
+                if (action == GLFW_RELEASE) {
+                    this->app.stateManager.toggleMovingPan();
                 }
                 break;
         }
@@ -122,7 +153,16 @@ namespace snd3D {
     }
 
     void Callbacks::scroll(double xOffset, double yOffset) {
-        this->app.scene->camera->zoom(yOffset);
+        switch (this->app.stateManager.getCurrentState()) {
+            case AppState::PAN:
+            case AppState::MOVING_PAN:
+                this->app.scene->camera->movePerpendicular(xOffset * constants::factors::PERPENDICULAR_PAN, yOffset * constants::factors::PERPENDICULAR_PAN);
+                break;
+
+            default:
+                this->app.scene->camera->zoom(yOffset);
+                break;
+        }
     }
 
     void Callbacks::close() {
