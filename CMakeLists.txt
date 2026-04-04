@@ -34,9 +34,13 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/assimp/assimp.git
     GIT_TAG v6.0.4
 )
+
+set(ASSIMP_NO_EXPORT ON CACHE BOOL "" FORCE)                        # Disable all file exporters
 set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)  # Disable all file importers
 set(ASSIMP_BUILD_OBJ_IMPORTER ON CACHE BOOL "" FORCE)               # Enable only OBJ importer
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)              # Disable extra tool building
+set(ASSIMP_BUILD_ASSIMP_VIEW OFF CACHE BOOL "" FORCE)               # Disable assimp gui
+set(ASSIMP_BUILD_SAMPLES OFF CACHE BOOL "" FORCE)                   # Disable assimp tutorials
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)                     # Disable assimp test suuite building
 set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)                         # Don't install the library on the system, keep it into the build folder
 set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "" FORCE)                       # Build assimp zlib version
