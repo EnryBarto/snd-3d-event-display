@@ -13,6 +13,7 @@ namespace snd3D {
             void shiftPressed();
             void shiftReleased();
             void toggleMovingPan();
+            void toggleImageExport();
 
         private:
             AppState currentState = AppState::TRACKBALL;

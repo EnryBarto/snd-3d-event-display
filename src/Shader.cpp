@@ -8,7 +8,7 @@
 namespace snd3D {
 
     Shader::Shader(std::string name, std::string vertexShader, std::string fragmentShader) {
-        this->programId = ShaderMaker::createProgram(std::string(constants::paths::SHADER_FOLDER) + vertexShader, std::string(constants::paths::SHADER_FOLDER) + fragmentShader);
+        this->programId = ShaderMaker::createProgram(std::string(constants::paths::SHADER) + vertexShader, std::string(constants::paths::SHADER) + fragmentShader);
         this->name = std::string(name);
 
         this->uniform_Model = glGetUniformLocation(this->programId, "Model");

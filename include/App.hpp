@@ -18,6 +18,7 @@ namespace snd3D {
         public:
             App();
             void run();
+            void exportImage();
 
         private:
             AppSettings settings;

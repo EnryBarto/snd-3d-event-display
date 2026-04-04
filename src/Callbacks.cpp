@@ -55,6 +55,10 @@ namespace snd3D {
                 case GLFW_KEY_MINUS:
                     this->app.guiManager->changeFontSize(1 / constants::factors::GUI_FONT_RESIZE);
                     break;
+
+                case GLFW_KEY_S:
+                    this->app.stateManager.toggleImageExport();
+                    break;
             }
         }
         else if (mods == 0) { // No control keys are pressed

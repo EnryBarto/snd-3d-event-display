@@ -42,14 +42,21 @@ set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)                         # Don't inst
 set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "" FORCE)                       # Build assimp zlib version
 set(ASSIMP_BUILD_GLTF_IMPORTER ON CACHE BOOL "" FORCE)              # Enable glTF importer
 
-FetchContent_MakeAvailable(glfw glm assimp)
+# STB IMAGE
+FetchContent_Declare(
+    stb
+    GIT_REPOSITORY https://github.com/nothings/stb.git
+    GIT_TAG        master
+)
+
+FetchContent_MakeAvailable(glfw glm assimp stb)
 
 # --- LOCAL DEPENDENCIES ---
 set(GLAD_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/external/glad")
 set(IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/imgui")
 
 # --- SET PROJECT SOURCES ---
-file(GLOB_RECURSE PROJECT_SOURCES 
+file(GLOB_RECURSE PROJECT_SOURCES
     "src/*.cpp"
     "${GLAD_DIR}/src/glad.c"
     "${IMGUI_DIR}/*.cpp"
@@ -59,10 +66,11 @@ file(GLOB_RECURSE PROJECT_SOURCES
 
 # --- TARGET AND INCLUDES ---
 set(BINARY_NAME "snddisplay") # Change binary name
-add_executable(${BINARY_NAME} src/main.cpp ${PROJECT_SOURCES})
+add_executable(${BINARY_NAME} ${PROJECT_SOURCES})
 
-target_include_directories(${BINARY_NAME} PRIVATE 
+target_include_directories(${BINARY_NAME} PRIVATE
     "include"
+    "${stb_SOURCE_DIR}"
     "${GLAD_DIR}/include"
     "${IMGUI_DIR}"
     "${IMGUI_DIR}/backends"
@@ -71,7 +79,7 @@ target_include_directories(${BINARY_NAME} PRIVATE
 # --- LINKING ---
 find_package(OpenGL REQUIRED) # Dinamically link OpenGL
 
-target_link_libraries(${BINARY_NAME} PRIVATE 
+target_link_libraries(${BINARY_NAME} PRIVATE
     glm::glm
     assimp::assimp
     glfw
@@ -80,7 +88,7 @@ target_link_libraries(${BINARY_NAME} PRIVATE
 )
 
 # --- ASSETS ---
-# Copy assets folder into binary folder
+# Copy assets folder into binary folder and create output folder
 set(ASSETS_SRC "${CMAKE_CURRENT_SOURCE_DIR}/assets")
 
 if(EXISTS "${ASSETS_SRC}")

@@ -54,6 +54,9 @@ namespace snd3D {
     void Gui::drawMenuBar() {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
+                if (ImGui::MenuItem("Save Image", "Ctrl + S")) {
+                    this->app.stateManager.toggleImageExport();
+                }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Quit", "Alt + F4")) {
                     this->app.stateManager.close();

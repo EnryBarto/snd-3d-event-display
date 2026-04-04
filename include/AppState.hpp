@@ -6,6 +6,7 @@ namespace snd3D {
         MOVING_TRACKBALL,
         PAN,
         MOVING_PAN,
+        EXPORT_IMAGE,
         CLOSED
     };
 
@@ -15,6 +16,7 @@ namespace snd3D {
             case AppState::MOVING_TRACKBALL:return "Trackball moving";
             case AppState::PAN:             return "Pan";
             case AppState::MOVING_PAN:      return "Pan moving";
+            case AppState::EXPORT_IMAGE:    return "Export image";
             case AppState::CLOSED:          return "Closing";
             default:                        return "Unknown";
         }

@@ -74,4 +74,18 @@ namespace snd3D {
                 break;
         }
     }
+    void AppStateManager::toggleImageExport() {
+        switch (this->currentState) {
+            case AppState::TRACKBALL:
+                this->nextState = AppState::EXPORT_IMAGE;
+                break;
+
+            case AppState::EXPORT_IMAGE:
+                this->nextState = AppState::TRACKBALL;
+                break;
+
+            default:
+                break;
+        }
+    }
 }
