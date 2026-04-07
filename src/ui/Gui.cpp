@@ -8,6 +8,7 @@
 #include "core/App.hpp"
 #include "core/Constants.hpp"
 #include "scene/Node.hpp"
+#include "state/AppState.hpp"
 
 namespace snd3D {
 
@@ -91,12 +92,15 @@ namespace snd3D {
     }
 
     void Gui::drawMenuBar() {
+        bool interactionState = isInteractionState(this->app.stateManager.getCurrentState());
         if (ImGui::BeginMainMenuBar()) {
             this->menuBarHeight = ImGui::GetWindowSize().y;
             if (ImGui::BeginMenu("File")) {
+                if (!interactionState) ImGui::BeginDisabled();
                 if (ImGui::MenuItem("Save Image", "Ctrl + S")) {
                     this->app.stateManager.toggleImageExport();
                 }
+                if (!interactionState) ImGui::EndDisabled();
                 ImGui::Separator();
                 if (ImGui::MenuItem("Quit", "Alt + F4")) {
                     this->app.stateManager.close();
@@ -120,36 +124,38 @@ namespace snd3D {
                 }
                 ImGui::EndMenu();
             }
-            if (ImGui::BeginMenu("Camera")) {
-                bool pivot = this->app.settings.isCameraPivotActive();
-                if (ImGui::MenuItem("Show Pivot", "P", pivot)) {
-                    this->app.settings.toggleCameraPivot();
+            if (interactionState) {
+                if (ImGui::BeginMenu("Camera")) {
+                    bool pivot = this->app.settings.isCameraPivotActive();
+                    if (ImGui::MenuItem("Show Pivot", "P", pivot)) {
+                        this->app.settings.toggleCameraPivot();
+                    }
+                    ImGui::Separator();
+                    if (ImGui::MenuItem("Zoom In", "Scroll Up")) {
+                        this->app.scene->camera->zoom(constants::factors::ZOOM);
+                    }
+                    if (ImGui::MenuItem("Zoom Out", "Scoll Down")) {
+                        this->app.scene->camera->zoom(-constants::factors::ZOOM);
+                    }
+                    ImGui::Separator();
+                    if (ImGui::MenuItem("Move Right", "Right")) {
+                        this->app.scene->camera->rotateByAngles(constants::factors::ROTATION_SPEED, 0);
+                    }
+                    if (ImGui::MenuItem("Move Left", "Left")) {
+                        this->app.scene->camera->rotateByAngles(-constants::factors::ROTATION_SPEED, 0);
+                    }
+                    if (ImGui::MenuItem("Move Up", "Up")) {
+                        this->app.scene->camera->rotateByAngles(0, constants::factors::ROTATION_SPEED);
+                    }
+                    if (ImGui::MenuItem("Move Down", "Down")) {
+                        this->app.scene->camera->rotateByAngles(0, -constants::factors::ROTATION_SPEED);
+                    }
+                    ImGui::Separator();
+                    if (ImGui::MenuItem("Reset", "R")) {
+                        this->app.scene->camera->reset();
+                    }
+                    ImGui::EndMenu();
                 }
-                ImGui::Separator();
-                if (ImGui::MenuItem("Zoom In", "Scroll Up")) {
-                    this->app.scene->camera->zoom(constants::factors::ZOOM);
-                }
-                if (ImGui::MenuItem("Zoom Out", "Scoll Down")) {
-                    this->app.scene->camera->zoom(-constants::factors::ZOOM);
-                }
-                ImGui::Separator();
-                if (ImGui::MenuItem("Move Right", "Right")) {
-                    this->app.scene->camera->rotateByAngles(constants::factors::ROTATION_SPEED, 0);
-                }
-                if (ImGui::MenuItem("Move Left", "Left")) {
-                    this->app.scene->camera->rotateByAngles(-constants::factors::ROTATION_SPEED, 0);
-                }
-                if (ImGui::MenuItem("Move Up", "Up")) {
-                    this->app.scene->camera->rotateByAngles(0, constants::factors::ROTATION_SPEED);
-                }
-                if (ImGui::MenuItem("Move Down", "Down")) {
-                    this->app.scene->camera->rotateByAngles(0, -constants::factors::ROTATION_SPEED);
-                }
-                ImGui::Separator();
-                if (ImGui::MenuItem("Reset", "R")) {
-                    this->app.scene->camera->reset();
-                }
-                ImGui::EndMenu();
             }
 
             // Move FPS label at the end of the window

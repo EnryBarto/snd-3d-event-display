@@ -31,4 +31,11 @@ namespace snd3D {
             default:                        return "Unknown";
         }
     }
+
+    inline bool isInteractionState(AppState state) {
+        return state == AppState::TRACKBALL
+            || state == AppState::MOVING_TRACKBALL
+            || state == AppState::PAN
+            || state == AppState::MOVING_PAN;
+    }
 }

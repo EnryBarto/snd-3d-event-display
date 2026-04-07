@@ -2,6 +2,7 @@
 
 #include "core/App.hpp"
 #include "core/Constants.hpp"
+#include "state/AppState.hpp"
 
 namespace snd3D {
     Callbacks::Callbacks(App& app) : app(app) {
@@ -44,6 +45,8 @@ namespace snd3D {
     void Callbacks::keyAction(int key, int scancode, int action, int mods) {
         if (action != GLFW_PRESS && (key != GLFW_KEY_LEFT_SHIFT && key != GLFW_KEY_RIGHT_SHIFT)) return;
 
+        bool interactionState = isInteractionState(this->app.stateManager.getCurrentState());
+
         if (mods & GLFW_MOD_CONTROL) { // CTRL pressed
             switch (key) {
                 case GLFW_KEY_KP_ADD:
@@ -57,7 +60,7 @@ namespace snd3D {
                     break;
 
                 case GLFW_KEY_S:
-                    this->app.stateManager.toggleImageExport();
+                    if (interactionState) this->app.stateManager.toggleImageExport();
                     break;
             }
         }
@@ -68,11 +71,11 @@ namespace snd3D {
                     break;
 
                 case GLFW_KEY_P:
-                    this->app.settings.toggleCameraPivot();
+                    if (interactionState) this->app.settings.toggleCameraPivot();
                     break;
 
                 case GLFW_KEY_R:
-                    this->app.scene->camera->reset();
+                    if (interactionState) this->app.scene->camera->reset();
                     break;
 
                 case GLFW_KEY_V:
@@ -160,7 +163,8 @@ namespace snd3D {
                 this->app.scene->camera->movePerpendicular(xOffset * constants::factors::PERPENDICULAR_PAN, yOffset * constants::factors::PERPENDICULAR_PAN);
                 break;
 
-            default:
+            case AppState::TRACKBALL:
+            case AppState::MOVING_TRACKBALL:
                 this->app.scene->camera->zoom(yOffset);
                 break;
         }
