@@ -66,19 +66,31 @@ FetchContent_MakeAvailable(glfw glm assimp stb imguifiledialog)
 set(GLAD_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/external/glad")
 set(IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/imgui")
 
+add_library(imgui STATIC
+    "${IMGUI_DIR}/imgui.cpp"
+    "${IMGUI_DIR}/imgui_draw.cpp"
+    "${IMGUI_DIR}/imgui_widgets.cpp"
+    "${IMGUI_DIR}/imgui_tables.cpp"
+    "${IMGUI_DIR}/imgui_demo.cpp"
+    "${IMGUI_DIR}/backends/imgui_impl_glfw.cpp"
+    "${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp"
+)
+
 # --- SET PROJECT SOURCES ---
 file(GLOB_RECURSE PROJECT_SOURCES
     "src/*.cpp"
     "${GLAD_DIR}/src/glad.c"
-    "${IMGUI_DIR}/*.cpp"
-    "${IMGUI_DIR}/backends/imgui_impl_glfw.cpp"
-    "${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp"
-    "${imguifiledialog_SOURCE_DIR}/ImGuiFileDialog.cpp"
 )
 
 # --- TARGET AND INCLUDES ---
 set(BINARY_NAME "snddisplay") # Change binary name
 add_executable(${BINARY_NAME} ${PROJECT_SOURCES})
+
+target_include_directories(imgui PUBLIC
+    "${IMGUI_DIR}"
+    "${IMGUI_DIR}/backends"
+    "${GLAD_DIR}/include"
+)
 
 target_include_directories(${BINARY_NAME} PRIVATE
     "include"
@@ -92,7 +104,11 @@ target_include_directories(${BINARY_NAME} PRIVATE
 # --- LINKING ---
 find_package(OpenGL REQUIRED) # Dinamically link OpenGL
 
+target_link_libraries(imgui PUBLIC glfw OpenGL::GL)
+target_link_libraries(ImGuiFileDialog PUBLIC imgui)
 target_link_libraries(${BINARY_NAME} PRIVATE
+    ImGuiFileDialog
+    imgui
     glm::glm
     assimp::assimp
     glfw
