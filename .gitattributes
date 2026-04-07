@@ -22,3 +22,4 @@ LICENSE    text
 *.gltf     binary
 
 external/** linguist-vendored
+include/ui/JetBrainsMono.h binary linguist-vendored
