@@ -53,7 +53,14 @@ FetchContent_Declare(
     GIT_TAG        master
 )
 
-FetchContent_MakeAvailable(glfw glm assimp stb)
+# IMGUI FILE DIALOG
+FetchContent_Declare(
+    imguifiledialog
+    GIT_REPOSITORY https://github.com/aiekick/ImGuiFileDialog.git
+    GIT_TAG        v0.6.8
+)
+
+FetchContent_MakeAvailable(glfw glm assimp stb imguifiledialog)
 
 # --- LOCAL DEPENDENCIES ---
 set(GLAD_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/external/glad")
@@ -66,6 +73,7 @@ file(GLOB_RECURSE PROJECT_SOURCES
     "${IMGUI_DIR}/*.cpp"
     "${IMGUI_DIR}/backends/imgui_impl_glfw.cpp"
     "${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp"
+    "${imguifiledialog_SOURCE_DIR}/ImGuiFileDialog.cpp"
 )
 
 # --- TARGET AND INCLUDES ---
@@ -75,6 +83,7 @@ add_executable(${BINARY_NAME} ${PROJECT_SOURCES})
 target_include_directories(${BINARY_NAME} PRIVATE
     "include"
     "${stb_SOURCE_DIR}"
+    "${imguifiledialog_SOURCE_DIR}"
     "${GLAD_DIR}/include"
     "${IMGUI_DIR}"
     "${IMGUI_DIR}/backends"
