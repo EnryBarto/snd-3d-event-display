@@ -18,6 +18,7 @@ namespace snd3D {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
+        io.MouseDoubleClickTime = 1; // Consider double click if it happens within 1 second
         io.FontGlobalScale = this->fontSize;
         io.IniFilename = NULL; // Deactivate ini file
         ImFont* font = io.Fonts->AddFontFromMemoryCompressedTTF( // Load JetBrainsMono

@@ -78,8 +78,9 @@ namespace snd3D {
             case AppState::MOVING_TRACKBALL:
             case AppState::PAN:
             case AppState::MOVING_PAN:
-                this->detector->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
                 if (this->settings.isCameraPivotActive()) this->pivot->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
+            case AppState::EXPORT_IMAGE:
+                this->detector->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
                 break;
         }
     }
