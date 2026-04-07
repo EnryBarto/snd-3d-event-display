@@ -152,6 +152,8 @@ namespace snd3D {
     }
 
     void Callbacks::scroll(double xOffset, double yOffset) {
+        if (this->app.guiManager->isPointerOverGui()) return;
+
         switch (this->app.stateManager.getCurrentState()) {
             case AppState::PAN:
             case AppState::MOVING_PAN:

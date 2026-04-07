@@ -48,6 +48,18 @@ namespace snd3D {
         }
     }
 
+    void Node::setGlobalActive(bool value) {
+        this->active = value;
+
+        for (auto& node : this->childrenNode) {
+            node->setGlobalActive(value);
+        }
+
+        for (auto& mesh : this->meshes) {
+            mesh->setActive(value);
+        }
+    }
+
     void Node::updateGlobalModelMatrix(const glm::mat4& parentModelMatrix) {
         this->globalModelMatrix = parentModelMatrix * this->localModelMatrix;
 
@@ -70,12 +82,14 @@ namespace snd3D {
 
     void Node::render(bool showAnchor) {
 
-        for (auto& node : this->childrenNode) {
-            node->render(showAnchor);
-        }
+        if (this->active) {
+            for (auto& node : this->childrenNode) {
+                node->render(showAnchor);
+            }
 
-        for (auto& mesh : this->meshes) {
-            mesh->render(this->globalModelMatrix, showAnchor);
+            for (auto& mesh : this->meshes) {
+                mesh->render(this->globalModelMatrix, showAnchor);
+            }
         }
     }
 }

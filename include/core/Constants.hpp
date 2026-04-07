@@ -41,5 +41,6 @@ namespace snd3D::constants {
         inline constexpr float GUI_FONT = 1.5f;
         inline constexpr int ANCHOR = 15;
         inline constexpr float PIVOT = 5;
+        inline constexpr int PADDING = 10;
     }
 }

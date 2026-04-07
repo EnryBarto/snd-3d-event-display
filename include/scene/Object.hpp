@@ -10,13 +10,18 @@
 #include "rendering/Shader.hpp"
 
 namespace snd3D {
+
     class Object {
+
+        friend class Gui; // Needs access to show object propreties
+
         public:
             Object(const aiScene* scene);
             Object(Node* rootNode);
             void setShader(const std::shared_ptr<Shader>& shader);
             void updateModelMatrix(const glm::mat4& modelMatrix);
             void render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor);
+            void setGlobalActive(bool value);
 
         private:
             std::unique_ptr<Node> rootNode;

@@ -47,9 +47,16 @@ namespace snd3D {
     }
 
     void Object::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {
-        this->shader->use();
-        this->shader->bindGlobalUniforms(viewMatrix, projectionMatrix, camPos);
-        // Using the render mode without passing model matrix beacuse we calculated it in the object creation
-        this->rootNode->render(showAnchor);
+        if (this->active) {
+            this->shader->use();
+            this->shader->bindGlobalUniforms(viewMatrix, projectionMatrix, camPos);
+            // Using the render mode without passing model matrix beacuse we calculated it in the object creation
+            this->rootNode->render(showAnchor);
+        }
+    }
+
+    void Object::setGlobalActive(bool value) {
+        this->active = value;
+        this->rootNode->setGlobalActive(value);
     }
 }

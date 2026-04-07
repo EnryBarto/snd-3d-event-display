@@ -12,6 +12,9 @@
 
 namespace snd3D {
     class Mesh {
+
+        friend class Gui; // Needs access to show and edit mesh propreties
+
         public:
             Mesh(
                 std::string name,
@@ -24,6 +27,7 @@ namespace snd3D {
             Mesh(aiMesh* mesh, glm::vec4 baseColor = glm::vec4(0.6f, 0.6f, 0.6f, 1.0f));
             void setMaterial(const std::shared_ptr<Material>& material);
             void setShader(const std::shared_ptr<Shader>& shader);
+            void setActive(bool value);
             void render(const glm::mat4& modelMatrix, bool showAnchor);
 
         private:

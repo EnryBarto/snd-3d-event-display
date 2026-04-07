@@ -2,6 +2,7 @@
 
 #include "core/App.hpp"
 #include "core/Constants.hpp"
+#include "scene/Node.hpp"
 
 namespace snd3D {
 
@@ -33,6 +34,7 @@ namespace snd3D {
         ImGui::NewFrame();
 
         this->drawMenuBar();
+        this->drawInspector();
     }
 
     void Gui::render() {
@@ -53,6 +55,7 @@ namespace snd3D {
 
     void Gui::drawMenuBar() {
         if (ImGui::BeginMainMenuBar()) {
+            this->menuBarHeight = ImGui::GetWindowSize().y;
             if (ImGui::BeginMenu("File")) {
                 if (ImGui::MenuItem("Save Image", "Ctrl + S")) {
                     this->app.stateManager.toggleImageExport();
@@ -123,5 +126,97 @@ namespace snd3D {
 
             ImGui::EndMainMenuBar();
         }
+    }
+
+    void Gui::drawInspector() {
+
+        ImGui::SetNextWindowSizeConstraints(
+            ImVec2(0.0f, 0.0f), // No min size
+            ImVec2(
+                this->app.windowManager->getCurrentResolution().x - constants::sizes::PADDING * 2,
+                this->app.windowManager->getCurrentResolution().y - this->menuBarHeight - constants::sizes::PADDING * 2
+            )
+        );
+
+        ImGui::SetNextWindowPos(ImVec2(constants::sizes::PADDING, this->menuBarHeight + constants::sizes::PADDING), ImGuiCond_Always);
+
+        ImGui::SetNextWindowSize(ImVec2(400, this->app.windowManager->getCurrentResolution().y - this->menuBarHeight - constants::sizes::PADDING * 2), ImGuiCond_Once);
+
+        ImGui::Begin("SCENE", NULL, ImGuiWindowFlags_NoMove);
+
+        this->drawObjectTree("SND", this->app.scene->detector.get());
+
+        ImGui::End();
+    }
+
+    void Gui::drawObjectTree(const std::string& label, Object* obj) {
+        if (!obj || !obj->rootNode) return;
+
+        ImGui::PushID(obj); // Create unique ID to identify the object into the gui
+
+        ImGui::Checkbox("##objActive", &obj->active);
+        ImGui::SameLine();
+
+        if (ImGui::CollapsingHeader(label.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+
+            ImGui::BeginChild((label + "Tree").c_str(), ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_ResizeY, ImGuiWindowFlags_HorizontalScrollbar);
+
+            if (ImGui::Button("Show All")) {
+                obj->setGlobalActive(true);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Hide All")) {
+                obj->setGlobalActive(false);
+            }
+
+            this->drawNodeTree(obj->rootNode.get()); // Start showing children recursively
+
+            ImGui::EndChild();
+        }
+
+        ImGui::PopID(); // End using this object ID
+    }
+
+    void Gui::drawNodeTree(Node* node) {
+        if (!node) return;
+
+        ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+
+        if (node->childrenNode.empty() && node->meshes.empty()) {
+            nodeFlags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+        }
+
+        ImGui::PushID(node); // Create unique ID to identify the node into the gui
+
+        ImGui::Checkbox("##nodeActive", &node->active);
+        ImGui::SameLine();
+
+        bool isOpened = ImGui::TreeNodeEx((void*)node, nodeFlags, "[Node] - %s", node->name.c_str()); // Create the tree for this node
+
+        if (isOpened) {
+            for (auto& mesh : node->meshes) {
+                ImGui::PushID(mesh.get()); // Create unique ID to identify the mesh into the gui
+
+                ImGuiTreeNodeFlags meshFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_Bullet;
+
+                ImGui::Checkbox("##meshActive", &mesh->active);
+                ImGui::SameLine();
+
+                ImGui::TreeNodeEx((void*)mesh.get(), meshFlags, "[Mesh] - %s", mesh->name.c_str());
+
+                ImGui::PopID();
+            }
+
+            for (auto& child : node->childrenNode) {
+                drawNodeTree(child.get());
+            }
+
+            // If the node isn't a leaf, close the TreeNodeEx
+            if (!(nodeFlags & ImGuiTreeNodeFlags_Leaf)) {
+                ImGui::TreePop();
+            }
+        }
+
+        ImGui::PopID();
     }
 }

@@ -79,7 +79,13 @@ namespace snd3D {
         this->gpuMesh->setShader(shader);
     }
 
+    void Mesh::setActive(bool value) {
+        this->active = value;
+    }
+
     void Mesh::render(const glm::mat4& modelMatrix, bool showAnchor) {
-        this->gpuMesh->render(modelMatrix, showAnchor, this->material.get());
+        if (this->active) {
+            this->gpuMesh->render(modelMatrix, showAnchor, this->material.get());
+        }
     }
 }
