@@ -1,5 +1,9 @@
 #include "ui/Gui.hpp"
 
+#include <iostream>
+
+#include <ImGuiFileDialog.h>
+
 #include "ui/JetBrainsMono.h"
 #include "core/App.hpp"
 #include "core/Constants.hpp"
@@ -43,7 +47,30 @@ namespace snd3D {
         ImGui::NewFrame();
 
         this->drawMenuBar();
-        this->drawInspector();
+
+        switch (this->app.stateManager.getCurrentState()) {
+
+            case AppState::WELCOME:
+                this->drawWelcomeMessage();
+                break;
+
+            case AppState::GEOMETRY_CHOICE:
+                this->drawGeometryFileDialog();
+                break;
+
+            case AppState::GEOMETRY_LOAD:
+            case AppState::SHOW_GEOMETRY_LOAD:
+                this->drawLoadingGeometry();
+                break;
+
+            case AppState::WAIT_GEOM_ABORT:
+                this->drawGeometryError();
+                break;
+
+            default:
+                this->drawInspector();
+                break;
+        }
     }
 
     void Gui::render() {
@@ -228,4 +255,125 @@ namespace snd3D {
 
         ImGui::PopID();
     }
+
+    void Gui::drawGeometryFileDialog() {
+
+        ImGui::SetNextWindowPos(ImVec2(constants::sizes::PADDING, this->menuBarHeight + constants::sizes::PADDING), ImGuiCond_Always);
+
+        ImGui::SetNextWindowSize(ImVec2(
+            this->app.windowManager->getCurrentResolution().x - constants::sizes::PADDING * 2,
+            this->app.windowManager->getCurrentResolution().y - this->menuBarHeight - constants::sizes::PADDING * 2),
+            ImGuiCond_Once
+        );
+
+        if (ImGuiFileDialog::Instance()->Display(
+            "ChooseGeometryFile",
+            ImGuiWindowFlags_NoCollapse,
+            ImVec2(0.0f, 0.0f),
+            ImVec2(
+                this->app.windowManager->getCurrentResolution().x - constants::sizes::PADDING * 2,
+                this->app.windowManager->getCurrentResolution().y - this->menuBarHeight - constants::sizes::PADDING * 2
+            )
+        )) {
+            if (ImGuiFileDialog::Instance()->IsOk()) {
+                std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+                std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+
+                this->app.stateManager.geometryFileSelected(filePathName);
+            } else {
+                this->app.stateManager.restart();
+            }
+
+            ImGuiFileDialog::Instance()->Close();
+        }
+    }
+
+    void Gui::drawWelcomeMessage() {
+
+        ImGui::SetNextWindowPos(ImVec2(constants::sizes::PADDING, this->menuBarHeight + constants::sizes::PADDING), ImGuiCond_Always);
+
+        ImGui::SetNextWindowSize(ImVec2(
+            this->app.windowManager->getCurrentResolution().x - constants::sizes::PADDING * 2,
+            this->app.windowManager->getCurrentResolution().y - this->menuBarHeight - constants::sizes::PADDING * 2),
+            ImGuiCond_Always
+        );
+
+        ImGui::Begin("WELCOME", NULL,
+            ImGuiWindowFlags_NoResize
+            | ImGuiWindowFlags_AlwaysAutoResize
+            | ImGuiWindowFlags_NoMove
+            | ImGuiWindowFlags_NoCollapse
+        );
+        ImGui::TextWrapped("Open a geometry asset to initialize the 3D viewport.");
+        ImGui::TextWrapped("Click the button below to browse your local files.");
+
+        ImGui::NewLine();
+        if (ImGui::Button("Browse")) {
+            this->app.stateManager.openGeometryDialog();
+            IGFD::FileDialogConfig config;
+            config.path = ".";
+            ImGuiFileDialog::Instance()->OpenDialog("ChooseGeometryFile", "CHOOSE GEOMETRY FILE", ".gltf", config);
+        }
+        ImGui::NewLine();
+        if (ImGui::Button("Quit")) {
+            this->app.stateManager.close();
+        }
+
+        ImGui::End();
+    }
+
+    void Gui::drawLoadingGeometry() {
+
+        ImGui::SetNextWindowPos(ImVec2(constants::sizes::PADDING, this->menuBarHeight + constants::sizes::PADDING), ImGuiCond_Always);
+
+        ImGui::SetNextWindowSize(ImVec2(
+            this->app.windowManager->getCurrentResolution().x - constants::sizes::PADDING * 2,
+            this->app.windowManager->getCurrentResolution().y - this->menuBarHeight - constants::sizes::PADDING * 2),
+            ImGuiCond_Always
+        );
+
+        ImGui::Begin("LOADING GEOMETRY", NULL,
+            ImGuiWindowFlags_NoResize
+            | ImGuiWindowFlags_AlwaysAutoResize
+            | ImGuiWindowFlags_NoMove
+            | ImGuiWindowFlags_NoCollapse
+        );
+        ImGui::TextWrapped("Please Wait...");
+        ImGui::NewLine();
+        ImGui::TextWrapped("Loading geometry file:");
+        ImGui::TextWrapped(this->app.stateManager.getDetectorPath().c_str());
+
+        ImGui::End();
+    }
+
+    void Gui::drawGeometryError() {
+
+        ImGui::SetNextWindowPos(ImVec2(constants::sizes::PADDING, this->menuBarHeight + constants::sizes::PADDING), ImGuiCond_Always);
+
+        ImGui::SetNextWindowSize(ImVec2(
+            this->app.windowManager->getCurrentResolution().x - constants::sizes::PADDING * 2,
+            this->app.windowManager->getCurrentResolution().y - this->menuBarHeight - constants::sizes::PADDING * 2),
+            ImGuiCond_Always
+        );
+
+        ImGui::Begin("ERROR LOADING GEOMETRY", NULL,
+            ImGuiWindowFlags_NoResize
+            | ImGuiWindowFlags_AlwaysAutoResize
+            | ImGuiWindowFlags_NoMove
+            | ImGuiWindowFlags_NoCollapse
+        );
+        ImGui::TextWrapped("Error loading geometry file.");
+
+        ImGui::NewLine();
+        if (ImGui::Button("OK")) {
+            this->app.stateManager.restart();
+        }
+        ImGui::NewLine();
+        if (ImGui::Button("Quit")) {
+            this->app.stateManager.close();
+        }
+
+        ImGui::End();
+    }
+
 }

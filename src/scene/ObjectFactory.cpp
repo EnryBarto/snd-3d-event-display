@@ -1,8 +1,13 @@
 #include "scene/ObjectFactory.hpp"
 
 #include <vector>
+#include <stdexcept>
+#include <iostream>
 
 #include <glm/gtc/constants.hpp>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
 
 #include "scene/Mesh.hpp"
 #include "scene/Node.hpp"
@@ -13,6 +18,23 @@ using namespace glm;
 namespace snd3D {
     ObjectFactory::ObjectFactory() {
         this->sphere = shared_ptr<Mesh>(ObjectFactory::createSphere());
+    }
+
+    Object* ObjectFactory::getFromFile(string filePath) {
+        Assimp::Importer importer;
+        const aiScene* scene = importer.ReadFile(filePath,
+            aiProcess_Triangulate |
+            aiProcess_GenNormals |
+            aiProcess_JoinIdenticalVertices |
+            aiProcess_ImproveCacheLocality
+        );
+
+        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+            cerr << "Error loading file: " << importer.GetErrorString() << endl;
+            throw runtime_error("Assimp Error: " + string(importer.GetErrorString()));
+        }
+
+        return new Object(scene);
     }
 
     Object* ObjectFactory::getSphere() {

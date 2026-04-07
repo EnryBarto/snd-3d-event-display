@@ -3,6 +3,7 @@
 #include <memory>
 
 #include <glm/glm.hpp>
+#include <string>
 
 #include "scene/Camera.hpp"
 #include "scene/Object.hpp"
@@ -10,6 +11,7 @@
 #include "core/AppSettings.hpp"
 #include "core/WindowManager.hpp"
 #include "state/AppStateManager.hpp"
+#include "scene/ObjectFactory.hpp"
 
 namespace snd3D {
     class Scene {
@@ -22,12 +24,16 @@ namespace snd3D {
             Scene(WindowManager& winMan, AppStateManager& stateMan, AppSettings& stgs);
             void update();
             void render();
+            void loadDetector(std::string filePath);
 
         private:
             std::unique_ptr<Camera> camera;
             std::unique_ptr<Projection> projection;
             std::unique_ptr<Object> detector;
             std::unique_ptr<Object> pivot;
+            std::shared_ptr<Shader> shader;
+
+            ObjectFactory objectFactory;
 
             // Owned by App, keep reference to spped up access
             AppSettings& settings;

@@ -24,11 +24,15 @@ namespace snd3D {
         private:
             App& app; // Keep reference to App object
             float fontSize;
-            float menuBarHeight;
+            float menuBarHeight = 0;
 
             void drawMenuBar();
             void drawInspector();
             void drawObjectTree(const std::string& label, Object* obj);
             void drawNodeTree(Node* node);
+            void drawGeometryFileDialog();
+            void drawWelcomeMessage();
+            void drawLoadingGeometry();
+            void drawGeometryError();
     };
 }

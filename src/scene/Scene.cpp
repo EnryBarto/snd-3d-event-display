@@ -3,40 +3,17 @@
 #include <iostream>
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>
 
 #include "core/Constants.hpp"
-#include "scene/ObjectFactory.hpp"
 
 namespace snd3D {
 
     Scene::Scene(WindowManager& winMan, AppStateManager& stateMan, AppSettings& appSettings) : windowManager(winMan), stateManager(stateMan), settings(appSettings) {
         this->camera = std::make_unique<Camera>(glm::vec3(400.0f), glm::vec3(0.0f, 0.0f, 554.0f));
         this->projection = std::make_unique<Projection>(this->windowManager.getAspectRatio(), 80.0f);
-
-        Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile("assets/geometries/SND.gltf",
-            aiProcess_Triangulate |
-            aiProcess_GenNormals |
-            aiProcess_JoinIdenticalVertices |
-            aiProcess_ImproveCacheLocality
-        );
-
-        if (!scene) {
-            std::cerr << "Error loading file: " << importer.GetErrorString() << std::endl;
-        }
-
-        // Debug object
-        this->detector = std::make_unique<Object>(scene);
-        std::shared_ptr<snd3D::Shader> flat = std::make_shared<snd3D::Shader>("Flat", "flat.vert", "flat.frag");
-        this->detector->setShader(flat);
-        flat->use();
-
-        auto factory = ObjectFactory();
-        this->pivot = std::unique_ptr<Object>(factory.getSphere());
-        this->pivot->setShader(flat);
+        this->shader = std::make_shared<snd3D::Shader>("Flat", "flat.vert", "flat.frag");
+        this->pivot = std::unique_ptr<Object>(this->objectFactory.getSphere());
+        this->pivot->setShader(this->shader);
     }
 
     void Scene::update() {
@@ -44,6 +21,16 @@ namespace snd3D {
 
         // Calculation are made here beacuse in the callbacks they would be execute too many times, slowing down the reactivity
         switch (this->stateManager.getCurrentState()) {
+            case AppState::GEOMETRY_LOAD:
+                try {
+                    this->detector = std::unique_ptr<Object>(this->objectFactory.getFromFile(this->stateManager.getDetectorPath()));
+                    this->detector->setShader(this->shader);
+                    this->stateManager.geometryLoaded();
+                } catch (...) {
+                    this->stateManager.errorLoadingGeometry();
+                }
+                break;
+
             case AppState::MOVING_PAN: {
                 float deltaX = this->windowManager.lastMousePosition[0] - this->windowManager.currentMousePosition[0];
                 float deltaY = this->windowManager.currentMousePosition[1] - this->windowManager.lastMousePosition[1];
@@ -86,8 +73,15 @@ namespace snd3D {
     }
 
     void Scene::render() {
-        this->detector->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
-        if (this->settings.isCameraPivotActive()) this->pivot->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
+        switch (this->stateManager.getCurrentState()) {
+            case AppState::TRACKBALL:
+            case AppState::MOVING_TRACKBALL:
+            case AppState::PAN:
+            case AppState::MOVING_PAN:
+                this->detector->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
+                if (this->settings.isCameraPivotActive()) this->pivot->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
+                break;
+        }
     }
 
     glm::vec3 Scene::cursorToUnitSphere(int x, int y) {

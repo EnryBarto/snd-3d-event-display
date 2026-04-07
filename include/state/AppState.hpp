@@ -2,6 +2,11 @@
 
 namespace snd3D {
     enum class AppState {
+        WELCOME,
+        GEOMETRY_CHOICE,
+        SHOW_GEOMETRY_LOAD,
+        GEOMETRY_LOAD,
+        WAIT_GEOM_ABORT,
         TRACKBALL,
         MOVING_TRACKBALL,
         PAN,
@@ -11,7 +16,12 @@ namespace snd3D {
     };
 
     inline const char* appStateToString(AppState state) {
-            switch (state) {
+        switch (state) {
+            case AppState::WELCOME:         return "Welcome";
+            case AppState::GEOMETRY_CHOICE: return "Choosing geometry";
+            case AppState::GEOMETRY_LOAD:   return "Loading geometry";
+            case AppState::SHOW_GEOMETRY_LOAD: return "Loading geometry";
+            case AppState::WAIT_GEOM_ABORT: return "Failed loading geometry";
             case AppState::TRACKBALL:       return "Trackball";
             case AppState::MOVING_TRACKBALL:return "Trackball moving";
             case AppState::PAN:             return "Pan";

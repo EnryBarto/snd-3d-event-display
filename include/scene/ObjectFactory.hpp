@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include <glm/glm.hpp>
 
@@ -10,6 +11,7 @@ namespace snd3D {
     class ObjectFactory {
         public:
             ObjectFactory();
+            Object* getFromFile(std::string filePath);
             Object* getSphere();
 
         private:

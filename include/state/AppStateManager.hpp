@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "state/AppState.hpp"
 
 namespace snd3D {
@@ -9,14 +11,22 @@ namespace snd3D {
             AppState getCurrentState();
 
             void close();
+            void openGeometryDialog();
             void toggleMovingTrackball();
             void shiftPressed();
             void shiftReleased();
             void toggleMovingPan();
             void toggleImageExport();
+            void geometryFileSelected(std::string filePath);
+            std::string getDetectorPath();
+            void errorLoadingGeometry();
+            void geometryLoaded();
+            void restart();
 
         private:
-            AppState currentState = AppState::TRACKBALL;
-            AppState nextState = AppState::TRACKBALL;
+            AppState currentState = AppState::WELCOME;
+            AppState nextState = AppState::WELCOME;
+
+            std::string detectorPath;
     };
 }
