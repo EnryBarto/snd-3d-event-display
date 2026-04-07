@@ -1,5 +1,6 @@
 #include "ui/Gui.hpp"
 
+#include "ui/JetBrainsMono.h"
 #include "core/App.hpp"
 #include "core/Constants.hpp"
 #include "scene/Node.hpp"
@@ -15,6 +16,14 @@ namespace snd3D {
         ImGuiIO& io = ImGui::GetIO();
         io.FontGlobalScale = this->fontSize;
         io.IniFilename = NULL; // Deactivate ini file
+        ImFont* font = io.Fonts->AddFontFromMemoryCompressedTTF( // Load JetBrainsMono
+            jetbrains_mono_compressed_data,
+            jetbrains_mono_compressed_size,
+            constants::sizes::FONT
+        );
+        if (font == nullptr) {
+            io.Fonts->AddFontDefault();
+        }
         ImGui::StyleColorsDark(); // Set ImGUI dark theme
         ImGui_ImplGlfw_InitForOpenGL(this->app.windowManager->getWindow(), true);
         ImGui_ImplOpenGL3_Init("#version 330 core");

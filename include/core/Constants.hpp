@@ -10,7 +10,7 @@ namespace snd3D::constants {
         inline constexpr float PROJ_FOVY_MAX = 115;
         inline constexpr float PROJ_FOVY_MIN = 45;
         inline constexpr float ZOOM_DISTANCE_MIN = 50;
-        inline constexpr float GUI_FONT_SIZE_MIN = 0.75f;
+        inline constexpr float GUI_FONT_SIZE_MIN = 0.5f;
     }
 
     namespace defaults {
@@ -38,7 +38,8 @@ namespace snd3D::constants {
     }
 
     namespace sizes {
-        inline constexpr float GUI_FONT = 1.5f;
+        inline constexpr float GUI_FONT = 0.8f;
+        inline constexpr float FONT = 30;
         inline constexpr int ANCHOR = 15;
         inline constexpr float PIVOT = 5;
         inline constexpr int PADDING = 10;
