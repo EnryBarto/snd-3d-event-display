@@ -8,4 +8,12 @@ namespace snd3D {
     void AppSettings::toggleCameraPivot() {
         this->cameraPivotActive = !this->cameraPivotActive;
     }
+
+    bool AppSettings::isSceneInspectorActive() {
+        return this->sceneInspectorActive;
+    }
+
+    void AppSettings::toggleSceneInspector() {
+        this->sceneInspectorActive = !this->sceneInspectorActive;
+    }
 }

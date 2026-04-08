@@ -7,8 +7,11 @@ namespace snd3D {
         public:
             bool isCameraPivotActive();
             void toggleCameraPivot();
+            bool isSceneInspectorActive();
+            void toggleSceneInspector();
 
         private:
             bool cameraPivotActive = constants::defaults::SHOW_PIVOT;
+            bool sceneInspectorActive = true;
     };
 }

@@ -97,7 +97,7 @@ namespace snd3D {
             this->menuBarHeight = ImGui::GetWindowSize().y;
             if (ImGui::BeginMenu("File")) {
                 if (!interactionState) ImGui::BeginDisabled();
-                if (ImGui::MenuItem("Save Image", "Ctrl + S")) {
+                if (ImGui::MenuItem("Save Image", "Ctrl + P")) {
                     this->app.stateManager.toggleImageExport();
                 }
                 if (!interactionState) ImGui::EndDisabled();
@@ -107,7 +107,16 @@ namespace snd3D {
                 }
                 ImGui::EndMenu();
             }
-            if (ImGui::BeginMenu("Settings")) {
+            if (ImGui::BeginMenu("View")) {
+                if (!interactionState) ImGui::BeginDisabled();
+                bool inspector = this->app.settings.isSceneInspectorActive();
+                if (ImGui::MenuItem("Scene inspector", "S", inspector)) {
+                    this->app.settings.toggleSceneInspector();
+                }
+                if (!interactionState) ImGui::EndDisabled();
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Display")) {
                 if (ImGui::MenuItem("Font +", "Ctrl + +")) {
                     this->changeFontSize(constants::factors::GUI_FONT_RESIZE);
                 }
@@ -124,38 +133,38 @@ namespace snd3D {
                 }
                 ImGui::EndMenu();
             }
-            if (interactionState) {
-                if (ImGui::BeginMenu("Camera")) {
-                    bool pivot = this->app.settings.isCameraPivotActive();
-                    if (ImGui::MenuItem("Show Pivot", "P", pivot)) {
-                        this->app.settings.toggleCameraPivot();
-                    }
-                    ImGui::Separator();
-                    if (ImGui::MenuItem("Zoom In", "Scroll Up")) {
-                        this->app.scene->camera->zoom(constants::factors::ZOOM);
-                    }
-                    if (ImGui::MenuItem("Zoom Out", "Scoll Down")) {
-                        this->app.scene->camera->zoom(-constants::factors::ZOOM);
-                    }
-                    ImGui::Separator();
-                    if (ImGui::MenuItem("Move Right", "Right")) {
-                        this->app.scene->camera->rotateByAngles(constants::factors::ROTATION_SPEED, 0);
-                    }
-                    if (ImGui::MenuItem("Move Left", "Left")) {
-                        this->app.scene->camera->rotateByAngles(-constants::factors::ROTATION_SPEED, 0);
-                    }
-                    if (ImGui::MenuItem("Move Up", "Up")) {
-                        this->app.scene->camera->rotateByAngles(0, constants::factors::ROTATION_SPEED);
-                    }
-                    if (ImGui::MenuItem("Move Down", "Down")) {
-                        this->app.scene->camera->rotateByAngles(0, -constants::factors::ROTATION_SPEED);
-                    }
-                    ImGui::Separator();
-                    if (ImGui::MenuItem("Reset", "R")) {
-                        this->app.scene->camera->reset();
-                    }
-                    ImGui::EndMenu();
+            if (ImGui::BeginMenu("Camera")) {
+                if (!interactionState) ImGui::BeginDisabled();
+                bool pivot = this->app.settings.isCameraPivotActive();
+                if (ImGui::MenuItem("Show Pivot", "P", pivot)) {
+                    this->app.settings.toggleCameraPivot();
                 }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Zoom In", "Scroll Up")) {
+                    this->app.scene->camera->zoom(constants::factors::ZOOM);
+                }
+                if (ImGui::MenuItem("Zoom Out", "Scroll Down")) {
+                    this->app.scene->camera->zoom(-constants::factors::ZOOM);
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Move Right", "Right")) {
+                    this->app.scene->camera->rotateByAngles(constants::factors::ROTATION_SPEED, 0);
+                }
+                if (ImGui::MenuItem("Move Left", "Left")) {
+                    this->app.scene->camera->rotateByAngles(-constants::factors::ROTATION_SPEED, 0);
+                }
+                if (ImGui::MenuItem("Move Up", "Up")) {
+                    this->app.scene->camera->rotateByAngles(0, constants::factors::ROTATION_SPEED);
+                }
+                if (ImGui::MenuItem("Move Down", "Down")) {
+                    this->app.scene->camera->rotateByAngles(0, -constants::factors::ROTATION_SPEED);
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Reset", "R")) {
+                    this->app.scene->camera->reset();
+                }
+                if (!interactionState) ImGui::EndDisabled();
+                ImGui::EndMenu();
             }
 
             // Move FPS label at the end of the window
@@ -172,24 +181,29 @@ namespace snd3D {
     }
 
     void Gui::drawInspector() {
+        bool open = this->app.settings.isSceneInspectorActive();
 
-        ImGui::SetNextWindowSizeConstraints(
-            ImVec2(0.0f, 0.0f), // No min size
-            ImVec2(
-                this->app.windowManager->getCurrentResolution().x - constants::sizes::PADDING * 2,
-                this->app.windowManager->getCurrentResolution().y - this->menuBarHeight - constants::sizes::PADDING * 2
-            )
-        );
+        if (open) {
+            ImGui::SetNextWindowSizeConstraints(
+                ImVec2(0.0f, 0.0f), // No min size
+                ImVec2(
+                    this->app.windowManager->getCurrentResolution().x - constants::sizes::PADDING * 2,
+                    this->app.windowManager->getCurrentResolution().y - this->menuBarHeight - constants::sizes::PADDING * 2
+                )
+            );
 
-        ImGui::SetNextWindowPos(ImVec2(constants::sizes::PADDING, this->menuBarHeight + constants::sizes::PADDING), ImGuiCond_Always);
+            ImGui::SetNextWindowPos(ImVec2(constants::sizes::PADDING, this->menuBarHeight + constants::sizes::PADDING), ImGuiCond_Always);
 
-        ImGui::SetNextWindowSize(ImVec2(400, this->app.windowManager->getCurrentResolution().y - this->menuBarHeight - constants::sizes::PADDING * 2), ImGuiCond_Once);
+            ImGui::SetNextWindowSize(ImVec2(400, this->app.windowManager->getCurrentResolution().y - this->menuBarHeight - constants::sizes::PADDING * 2), ImGuiCond_Once);
 
-        ImGui::Begin("SCENE", NULL, ImGuiWindowFlags_NoMove);
+            ImGui::Begin("SCENE", &open, ImGuiWindowFlags_NoMove);
 
-        this->drawObjectTree("SND", this->app.scene->detector.get());
+            this->drawObjectTree("SND", this->app.scene->detector.get());
 
-        ImGui::End();
+            ImGui::End();
+        }
+
+        if (open != this->app.settings.isSceneInspectorActive()) this->app.settings.toggleSceneInspector();
     }
 
     void Gui::drawObjectTree(const std::string& label, Object* obj) {

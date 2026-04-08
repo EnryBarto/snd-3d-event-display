@@ -15,7 +15,7 @@ namespace snd3D {
             Object* getSphere();
 
         private:
-            static Mesh* createSphere(glm::vec4 baseColor = glm::vec4(0.6f, 0.6f, 0.6f, 1.0f));
+            static Mesh* createSphere(glm::vec4 baseColor = glm::vec4(1, 1, 0, 1.0f));
             std::shared_ptr<Mesh> sphere;
     };
 }

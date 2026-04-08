@@ -9,7 +9,7 @@ namespace snd3D::constants {
         inline constexpr float PROJ_NEARPLANE = 0.1f;
         inline constexpr float PROJ_FOVY_MAX = 115;
         inline constexpr float PROJ_FOVY_MIN = 45;
-        inline constexpr float ZOOM_DISTANCE_MIN = 50;
+        inline constexpr float ZOOM_DISTANCE_MIN = 5;
         inline constexpr float GUI_FONT_SIZE_MIN = 0.5f;
     }
 

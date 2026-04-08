@@ -59,7 +59,7 @@ namespace snd3D {
                     this->app.guiManager->changeFontSize(1 / constants::factors::GUI_FONT_RESIZE);
                     break;
 
-                case GLFW_KEY_S:
+                case GLFW_KEY_P:
                     if (interactionState) this->app.stateManager.toggleImageExport();
                     break;
             }
@@ -76,6 +76,10 @@ namespace snd3D {
 
                 case GLFW_KEY_R:
                     if (interactionState) this->app.scene->camera->reset();
+                    break;
+
+                case GLFW_KEY_S:
+                    if (interactionState) this->app.settings.toggleSceneInspector();
                     break;
 
                 case GLFW_KEY_V:
