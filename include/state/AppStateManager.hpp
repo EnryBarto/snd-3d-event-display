@@ -22,6 +22,7 @@ namespace snd3D {
             void errorLoadingGeometry();
             void geometryLoaded();
             void restart();
+            void resetInteraction();
 
         private:
             AppState currentState = AppState::WELCOME;

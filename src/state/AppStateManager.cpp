@@ -162,4 +162,18 @@ namespace snd3D {
                 break;
         }
     }
+
+    void AppStateManager::resetInteraction() {
+        switch (this->currentState) {
+            case AppState::TRACKBALL:
+            case AppState::MOVING_TRACKBALL:
+            case AppState::PAN:
+            case AppState::MOVING_PAN:
+                this->nextState = AppState::TRACKBALL;
+                break;
+
+            default:
+                break;
+        }
+    }
 }

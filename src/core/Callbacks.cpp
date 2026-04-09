@@ -98,6 +98,10 @@ namespace snd3D {
                 if (action == GLFW_PRESS) this->app.stateManager.shiftPressed();
                 else if (action == GLFW_RELEASE) this->app.stateManager.shiftReleased();
                 break;
+
+            case GLFW_KEY_ESCAPE:
+                this->app.stateManager.resetInteraction();
+                break;
         }
     }
 

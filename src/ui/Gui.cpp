@@ -165,7 +165,10 @@ namespace snd3D {
                     this->app.scene->camera->rotateByAngles(0, -constants::factors::ROTATION_SPEED);
                 }
                 ImGui::Separator();
-                if (ImGui::MenuItem("Reset", "R")) {
+                if (ImGui::MenuItem("Reset Interaction", "ESC")) {
+                    this->app.stateManager.resetInteraction();
+                }
+                if (ImGui::MenuItem("Reset Position", "R")) {
                     this->app.scene->camera->reset();
                 }
                 if (!interactionState) ImGui::EndDisabled();
