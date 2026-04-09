@@ -9,9 +9,25 @@ namespace snd3D {
             void toggleCameraPivot();
             bool isSceneInspectorActive();
             void toggleSceneInspector();
+            bool isRenderOptionsActive();
+            void toggleRenderOptions();
+            bool isTransparencyEnabled();
+            bool isTransparencyChanged();
+            void toggleTransparency();
+            float getEdgeAlphaValue();
+            void setEdgeAlphaValue(const float alpha);
+            float getFaceAlphaValue();
+            void setFaceAlphaValue(const float alpha);
+            float getEdgeThickness();
+            void setEdgeThickness(const float thickness);
 
         private:
             bool cameraPivotActive = constants::defaults::SHOW_PIVOT;
             bool sceneInspectorActive = true;
+            bool renderOptionsActive = true;
+            bool transparency = constants::defaults::TRANSPARENCY, transparencyChanged = true;
+            float edgeAlphaValue = constants::defaults::EDGE_ALPHA_VALUE;
+            float faceAlphaValue = constants::defaults::FACE_ALPHA_VALUE;
+            float edgeThickness = constants::defaults::EDGE_THICKNESS;
     };
 }

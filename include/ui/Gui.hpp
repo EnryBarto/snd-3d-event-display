@@ -28,6 +28,7 @@ namespace snd3D {
 
             void drawMenuBar();
             void drawInspector();
+            void drawRenderOptions();
             void drawObjectTree(const std::string& label, Object* obj);
             void drawNodeTree(Node* node);
             void drawGeometryFileDialog();

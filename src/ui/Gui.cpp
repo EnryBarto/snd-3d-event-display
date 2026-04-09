@@ -71,6 +71,7 @@ namespace snd3D {
 
             default:
                 this->drawInspector();
+                this->drawRenderOptions();
                 break;
         }
     }
@@ -112,6 +113,10 @@ namespace snd3D {
                 bool inspector = this->app.settings.isSceneInspectorActive();
                 if (ImGui::MenuItem("Scene inspector", "S", inspector)) {
                     this->app.settings.toggleSceneInspector();
+                }
+                bool renderOptions = this->app.settings.isRenderOptionsActive();
+                if (ImGui::MenuItem("Render options", "G", renderOptions)) {
+                    this->app.settings.toggleRenderOptions();
                 }
                 if (!interactionState) ImGui::EndDisabled();
                 ImGui::EndMenu();
@@ -204,6 +209,59 @@ namespace snd3D {
         }
 
         if (open != this->app.settings.isSceneInspectorActive()) this->app.settings.toggleSceneInspector();
+    }
+
+    void Gui::drawRenderOptions() {
+        bool open = this->app.settings.isRenderOptionsActive();
+
+        if (open) {
+            ImGui::SetNextWindowSizeConstraints(
+                ImVec2(0.0f, 0.0f), // No min size
+                ImVec2(
+                    this->app.windowManager->getCurrentResolution().x - constants::sizes::PADDING * 2,
+                    this->app.windowManager->getCurrentResolution().y - this->menuBarHeight - constants::sizes::PADDING * 2
+                )
+            );
+
+            ImGui::SetNextWindowPos(ImVec2(
+                this->app.windowManager->getCurrentResolution().x - constants::sizes::PADDING,
+                this->menuBarHeight + constants::sizes::PADDING),
+                ImGuiCond_Always,
+                ImVec2(1.0f, 0.0f) // Ser right pivot
+            );
+
+            ImGui::SetNextWindowSize(ImVec2(450, 0), ImGuiCond_Once);
+
+            ImGui::Begin("RENDER OPTIONS", &open, ImGuiWindowFlags_NoMove);
+            bool transparency = this->app.settings.isTransparencyEnabled();
+            if (ImGui::Checkbox("Transparency", &transparency)) {
+                this->app.settings.toggleTransparency();
+            }
+            if (transparency) {
+                ImGui::NewLine();
+                float edgeAlphaValue = this->app.settings.getEdgeAlphaValue();
+                if (ImGui::SliderFloat(" Edge Alpha", &edgeAlphaValue, constants::limits::ALPHA_VALUE_MIN, constants::limits::ALPHA_VALUE_MAX)) {
+                    this->app.settings.setEdgeAlphaValue(edgeAlphaValue);
+                }
+                float faceAlphaValue = this->app.settings.getFaceAlphaValue();
+                if (ImGui::SliderFloat(" Face Alpha", &faceAlphaValue, constants::limits::ALPHA_VALUE_MIN, constants::limits::ALPHA_VALUE_MAX)) {
+                    this->app.settings.setFaceAlphaValue(faceAlphaValue);
+                }
+                float edgeThickness = this->app.settings.getEdgeThickness();
+                if (ImGui::SliderFloat(" Edge Weight", &edgeThickness, constants::limits::EDGE_THICKNESS_MIN, constants::limits::EDGE_THICKNESS_MAX)) {
+                    this->app.settings.setEdgeThickness(edgeThickness);
+                }
+                ImGui::NewLine();
+                if (ImGui::Button("Reset")) {
+                    this->app.settings.setEdgeAlphaValue(constants::defaults::EDGE_ALPHA_VALUE);
+                    this->app.settings.setFaceAlphaValue(constants::defaults::FACE_ALPHA_VALUE);
+                    this->app.settings.setEdgeThickness(constants::defaults::EDGE_THICKNESS);
+                }
+            }
+            ImGui::End();
+        }
+
+        if (open != this->app.settings.isRenderOptionsActive()) this->app.settings.toggleRenderOptions();
     }
 
     void Gui::drawObjectTree(const std::string& label, Object* obj) {

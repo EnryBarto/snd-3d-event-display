@@ -21,7 +21,7 @@ namespace snd3D {
         friend class Gui;
 
         public:
-            Scene(WindowManager& winMan, AppStateManager& stateMan, AppSettings& stgs);
+            Scene(WindowManager& winMan, AppStateManager& stateMan, AppSettings& appSettings);
             void update();
             void render();
 

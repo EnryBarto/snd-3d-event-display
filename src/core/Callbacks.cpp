@@ -70,6 +70,10 @@ namespace snd3D {
                     this->app.windowManager->toggleFullScreen();
                     break;
 
+                case GLFW_KEY_G:
+                    if (interactionState) this->app.settings.toggleRenderOptions();
+                    break;
+
                 case GLFW_KEY_P:
                     if (interactionState) this->app.settings.toggleCameraPivot();
                     break;

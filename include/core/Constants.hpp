@@ -11,11 +11,19 @@ namespace snd3D::constants {
         inline constexpr float PROJ_FOVY_MIN = 45;
         inline constexpr float ZOOM_DISTANCE_MIN = 5;
         inline constexpr float GUI_FONT_SIZE_MIN = 0.5f;
+        inline constexpr float ALPHA_VALUE_MIN = 0;
+        inline constexpr float ALPHA_VALUE_MAX = 1;
+        inline constexpr float EDGE_THICKNESS_MIN = 0.5f;
+        inline constexpr float EDGE_THICKNESS_MAX = 5;
     }
 
     namespace defaults {
         inline constexpr float PROJ_FOVY = 80;
         inline constexpr bool SHOW_PIVOT = true;
+        inline constexpr bool TRANSPARENCY = true;
+        inline constexpr float EDGE_ALPHA_VALUE = 0.3f;
+        inline constexpr float FACE_ALPHA_VALUE = 0.1f;
+        inline constexpr float EDGE_THICKNESS = 1.5f;
 
         namespace window {
             inline constexpr int WIDTH = 1280;

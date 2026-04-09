@@ -24,7 +24,6 @@ namespace snd3D {
             case AppState::GEOMETRY_LOAD:
                 try {
                     this->detector = std::unique_ptr<Object>(this->objectFactory.getFromFile(this->stateManager.getDetectorPath()));
-                    this->detector->setShader(this->transparent);
                     this->stateManager.geometryLoaded();
                 } catch (...) {
                     this->stateManager.errorLoadingGeometry();
@@ -71,6 +70,14 @@ namespace snd3D {
         if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) camera->rotateByAngles(constants::factors::ROTATION_SPEED, 0);
         if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_UP) == GLFW_PRESS)  camera->rotateByAngles(0, constants::factors::ROTATION_SPEED);
         if (glfwGetKey(this->windowManager.getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) camera->rotateByAngles(0, -constants::factors::ROTATION_SPEED);
+
+        if (isInteractionState(this->stateManager.getCurrentState()) && this->settings.isTransparencyChanged()) {
+            if (this->settings.isTransparencyEnabled()) {
+                this->detector->setShader(this->transparent);
+            } else {
+                this->detector->setShader(this->flat);
+            }
+        }
     }
 
     void Scene::render() {
@@ -92,13 +99,17 @@ namespace snd3D {
 
                 // TRANSPARENT MESHES RENDERING
                 // The transparency function is set in the OpenGL initialization: GL_ONE_MINUS_SRC_ALPHA
-                this->transparent->use();
-                glEnable(GL_BLEND);     // Use transparency
-                glDepthMask(GL_FALSE);  // Don't write on the depth-buffer, otherwise further away meshes won't be rendered
+                if (this->settings.isTransparencyEnabled()) {
+                    this->transparent->use();
+                    glEnable(GL_BLEND);     // Use transparency
+                    glDepthMask(GL_FALSE);  // Don't write on the depth-buffer, otherwise further away meshes won't be rendered
+                }
 
-                this->detector->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
+                this->detector->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false, this->settings.getEdgeAlphaValue(), this->settings.getFaceAlphaValue(), this->settings.getEdgeThickness());
 
-                glDepthMask(GL_TRUE);   // Final reset
+                if (this->settings.isTransparencyEnabled()) {
+                    glDepthMask(GL_TRUE);   // Final reset
+                }
                 break;
         }
     }

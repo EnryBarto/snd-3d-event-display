@@ -46,10 +46,10 @@ namespace snd3D {
         this->rootNode->updateGlobalModelMatrix(this->modelMatrix);
     }
 
-    void Object::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor) {
+    void Object::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor, const float edgeAlphaValue, const float faceAlphaValue, const float edgeThickness) {
         if (this->active) {
             this->shader->use();
-            this->shader->bindGlobalUniforms(viewMatrix, projectionMatrix, camPos);
+            this->shader->bindGlobalUniforms(viewMatrix, projectionMatrix, camPos, edgeAlphaValue, faceAlphaValue, edgeThickness);
             // Using the render mode without passing model matrix beacuse we calculated it in the object creation
             this->rootNode->render(showAnchor);
         }

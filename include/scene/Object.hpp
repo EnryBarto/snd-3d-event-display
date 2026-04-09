@@ -20,7 +20,7 @@ namespace snd3D {
             Object(Node* rootNode);
             void setShader(const std::shared_ptr<Shader>& shader);
             void updateModelMatrix(const glm::mat4& modelMatrix);
-            void render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor);
+            void render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, bool showAnchor, const float edgeAlphaValue = 1, const float faceAlphaValue = 1, const float edgeThickness = 1);
             void setGlobalActive(bool value);
 
         private:
