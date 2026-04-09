@@ -24,14 +24,14 @@ namespace snd3D {
             Scene(WindowManager& winMan, AppStateManager& stateMan, AppSettings& stgs);
             void update();
             void render();
-            void loadDetector(std::string filePath);
 
         private:
             std::unique_ptr<Camera> camera;
             std::unique_ptr<Projection> projection;
             std::unique_ptr<Object> detector;
             std::unique_ptr<Object> pivot;
-            std::shared_ptr<Shader> shader;
+            std::shared_ptr<Shader> flat;
+            std::shared_ptr<Shader> transparent;
 
             ObjectFactory objectFactory;
 

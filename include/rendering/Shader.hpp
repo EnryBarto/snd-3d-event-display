@@ -10,7 +10,7 @@
 namespace snd3D {
     class Shader {
         public:
-            Shader(std::string name, std::string vertexShader, std::string fragmentShader);
+            Shader(std::string name, std::string vertexShader, std::string fragmentShader, std::string geometryfilename = "");
             ~Shader();
             std::string getName();
             GLuint getProgramId();

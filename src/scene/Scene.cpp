@@ -10,27 +10,28 @@ namespace snd3D {
 
     Scene::Scene(WindowManager& winMan, AppStateManager& stateMan, AppSettings& appSettings) : windowManager(winMan), stateManager(stateMan), settings(appSettings) {
         this->camera = std::make_unique<Camera>(glm::vec3(400.0f), glm::vec3(0.0f, 0.0f, 554.0f));
-        this->projection = std::make_unique<Projection>(this->windowManager.getAspectRatio(), 80.0f);
-        this->shader = std::make_shared<snd3D::Shader>("Flat", "flat.vert", "flat.frag");
+        this->projection = std::make_unique<Projection>(this->windowManager.getAspectRatio(), constants::defaults::PROJ_FOVY);
+        this->flat = std::make_shared<snd3D::Shader>("Flat", "flat.vert", "flat.frag");
+        this->transparent = std::make_shared<snd3D::Shader>("Transparent", "transparent.vert", "transparent.frag", "transparent.geom");
         this->pivot = std::unique_ptr<Object>(this->objectFactory.getSphere());
-        this->pivot->setShader(this->shader);
+        this->pivot->setShader(this->flat);
     }
 
     void Scene::update() {
         if (this->windowManager.isFramebufferChanged()) this->projection->changeAspectRatio(this->windowManager.getAspectRatio());
 
-        // Calculation are made here beacuse in the callbacks they would be execute too many times, slowing down the reactivity
         switch (this->stateManager.getCurrentState()) {
             case AppState::GEOMETRY_LOAD:
                 try {
                     this->detector = std::unique_ptr<Object>(this->objectFactory.getFromFile(this->stateManager.getDetectorPath()));
-                    this->detector->setShader(this->shader);
+                    this->detector->setShader(this->transparent);
                     this->stateManager.geometryLoaded();
                 } catch (...) {
                     this->stateManager.errorLoadingGeometry();
                 }
                 break;
 
+            // Calculation are made here beacuse in the callbacks they would be execute too many times, slowing down the reactivity
             case AppState::MOVING_PAN: {
                 float deltaX = this->windowManager.lastMousePosition[0] - this->windowManager.currentMousePosition[0];
                 float deltaY = this->windowManager.currentMousePosition[1] - this->windowManager.lastMousePosition[1];
@@ -78,9 +79,26 @@ namespace snd3D {
             case AppState::MOVING_TRACKBALL:
             case AppState::PAN:
             case AppState::MOVING_PAN:
-                if (this->settings.isCameraPivotActive()) this->pivot->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
             case AppState::EXPORT_IMAGE:
+
+                // SOLID MESHES RENDERING
+                this->flat->use();
+                glDepthMask(GL_TRUE);  // Write depth
+                glDisable(GL_BLEND);   // Don't use transparency
+
+                if (this->settings.isCameraPivotActive()) {
+                    this->pivot->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
+                }
+
+                // TRANSPARENT MESHES RENDERING
+                // The transparency function is set in the OpenGL initialization: GL_ONE_MINUS_SRC_ALPHA
+                this->transparent->use();
+                glEnable(GL_BLEND);     // Use transparency
+                glDepthMask(GL_FALSE);  // Don't write on the depth-buffer, otherwise further away meshes won't be rendered
+
                 this->detector->render(camera->getViewMatrix(), projection->getProjectionMatrix(), camera->getPosition(), false);
+
+                glDepthMask(GL_TRUE);   // Final reset
                 break;
         }
     }

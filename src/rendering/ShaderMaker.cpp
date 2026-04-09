@@ -22,64 +22,67 @@ namespace snd3D {
         return buf;
     }
 
-    GLuint ShaderMaker::createProgram(std::string vertexfilename, std::string fragmentfilename) {
-
+    GLuint ShaderMaker::createProgram(std::string vertexfilename, std::string fragmentfilename, std::string geometryfilename) {
         int success;
         char infoLog[512];
 
-        // Create shader objects
-        // Read vertex shader source
-        GLchar* VertexShader = readShaderSource(vertexfilename);
-        // Print the VERTEX SHADER code to the console
-        //cout << VertexShader;
-
-        // Generate an ID for the vertex shader
-        GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-        // Associate the shader source with the shader object
-        glShaderSource(vertexShaderId, 1, (const char**)&VertexShader, NULL);
-        // Compile the vertex shader
-        glCompileShader(vertexShaderId);
+        // --- VERTEX SHADER ---
+        GLchar* vertexSource = readShaderSource(vertexfilename); // Read vertex shader source
+        GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER); // Generate an ID for the vertex shader
+        glShaderSource(vertexShaderId, 1, (const char**)&vertexSource, NULL); // Associate the shader source with the shader object
+        glCompileShader(vertexShaderId); // Compile the vertex shader
 
         glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(vertexShaderId, 512, NULL, infoLog);
-            std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+            std::cerr << "ERROR::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
         }
 
-        // Read fragment shader source
-        const GLchar* FragmentShader = readShaderSource(fragmentfilename);
-        // Print the FRAGMENT SHADER code to the console
-        //cout << FragmentShader;
+        // --- GEOMETRY SHADER ---
+        GLuint geometryShaderId = 0;
+        if (!geometryfilename.empty()) {
+            GLchar* geometrySource = readShaderSource(geometryfilename);
+            geometryShaderId = glCreateShader(GL_GEOMETRY_SHADER);
+            glShaderSource(geometryShaderId, 1, (const char**)&geometrySource, NULL);
+            glCompileShader(geometryShaderId);
 
-        // Generate an ID for the fragment shader
+            glGetShaderiv(geometryShaderId, GL_COMPILE_STATUS, &success);
+            if (!success) {
+                glGetShaderInfoLog(geometryShaderId, 512, NULL, infoLog);
+                std::cerr << "ERROR::GEOMETRY::COMPILATION_FAILED\n" << infoLog << std::endl;
+            }
+        }
+
+        // --- FRAGMENT SHADER ---
+        GLchar* fragmentSource = readShaderSource(fragmentfilename);
         GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragmentShaderId, 1, (const char**)&FragmentShader, NULL);
-        // Compile the fragment shader
+        glShaderSource(fragmentShaderId, 1, (const char**)&fragmentSource, NULL);
         glCompileShader(fragmentShaderId);
 
         glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(fragmentShaderId, 512, NULL, infoLog);
-            std::cerr << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+            std::cerr << "ERROR::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
         }
 
-        // Create a program object and attach the compiled shaders
+        // SHADER CREATION
         GLuint programId = glCreateProgram();
-
         glAttachShader(programId, vertexShaderId);
+        if (geometryShaderId != 0) glAttachShader(programId, geometryShaderId);
         glAttachShader(programId, fragmentShaderId);
-        glLinkProgram(programId);
 
-        // Validate linking
+        // LINKING
+        glLinkProgram(programId);
         glGetProgramiv(programId, GL_LINK_STATUS, &success);
         if (!success) {
             glGetProgramInfoLog(programId, 512, NULL, infoLog);
-            std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+            std::cerr << "ERROR::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
         }
 
-        // Clean up shader objects after linking it to the program
-        glDeleteShader(vertexShaderId);
+        // CLEANUP
+        glDeleteShader(vertexShaderId); // Clean up shader objects after linking it to the program
         glDeleteShader(fragmentShaderId);
+        if (geometryShaderId != 0) glDeleteShader(geometryShaderId);
 
         return programId;
     }
