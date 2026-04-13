@@ -75,11 +75,11 @@ namespace snd3D {
                     break;
 
                 case GLFW_KEY_P:
-                    if (interactionState) this->app.settings.toggleCameraPivot();
+                    if (interactionState) this->app.scene->viewport->toggleProjectionType();
                     break;
 
                 case GLFW_KEY_R:
-                    if (interactionState) this->app.scene->camera->reset();
+                    if (interactionState) this->app.scene->viewport->reset();
                     break;
 
                 case GLFW_KEY_S:
@@ -88,6 +88,10 @@ namespace snd3D {
 
                 case GLFW_KEY_V:
                     this->app.windowManager->toggleVsync();
+                    break;
+
+                case GLFW_KEY_X:
+                    if (interactionState) this->app.settings.toggleCameraPivot();
                     break;
             }
         }
@@ -172,12 +176,12 @@ namespace snd3D {
         switch (this->app.stateManager.getCurrentState()) {
             case AppState::PAN:
             case AppState::MOVING_PAN:
-                this->app.scene->camera->movePerpendicular(xOffset * constants::factors::PAN, yOffset * constants::factors::PAN);
+                this->app.scene->viewport->movePerpendicular(xOffset * constants::factors::PAN, yOffset * constants::factors::PAN);
                 break;
 
             case AppState::TRACKBALL:
             case AppState::MOVING_TRACKBALL:
-                this->app.scene->camera->zoom(yOffset);
+                this->app.scene->viewport->zoom(yOffset);
                 break;
         }
     }

@@ -1,4 +1,4 @@
-#include "scene/Camera.hpp"
+#include "rendering/Camera.hpp"
 
 #include <cmath>
 
@@ -17,7 +17,7 @@ namespace snd3D {
         this->reset();
     }
 
-    const mat4& Camera::getViewMatrix() {
+    const mat4& Camera::getMatrix() {
         return this->viewMatrix;
     }
 

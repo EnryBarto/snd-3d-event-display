@@ -6,7 +6,7 @@ namespace snd3D {
     class Camera {
         public:
             Camera(glm::vec3 position, glm::vec3 target);
-            const glm::mat4& getViewMatrix();
+            const glm::mat4& getMatrix();
             const glm::vec3& getPosition();
             const glm::vec3& getTarget();
             void rotateAroundAxis(glm::vec3 axis, float angle);

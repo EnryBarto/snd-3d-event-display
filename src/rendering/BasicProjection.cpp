@@ -1,36 +1,31 @@
-#include "rendering/Projection.hpp"
+#include "rendering/BasicProjection.hpp"
 
-#include <cmath>
-
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm/glm.hpp>
 
 #include "core/Constants.hpp"
 
 namespace snd3D {
 
-    Projection::Projection(float aspectRatio, float fov) {
+    BasicProjection::BasicProjection(float aspectRatio, float fov) {
         this->nearPlane = constants::limits::PROJ_NEARPLANE;
         this->farPlane = constants::limits::PROJ_FARPLANE;
         this->aspectRatio = aspectRatio;
-        this->changeFov(fov);
+        this->fovY = glm::clamp(fov, constants::limits::PROJ_FOVY_MIN, constants::limits::PROJ_FOVY_MAX);
+        this->matrix = glm::mat4(1.0f);
     }
 
-    void Projection::changeAspectRatio(float newAspectRatio) {
+    void BasicProjection::setAspectRatio(float newAspectRatio) {
         if (std::isnan(newAspectRatio)) return;
         this->aspectRatio = newAspectRatio;
         this->computeProjectionMatrix();
     }
 
-    void Projection::changeFov(float newFov) {
+    void BasicProjection::setFov(float newFov) {
         this->fovY = glm::clamp(newFov, constants::limits::PROJ_FOVY_MIN, constants::limits::PROJ_FOVY_MAX);
         this->computeProjectionMatrix();
     }
 
-    const glm::mat4& Projection::getProjectionMatrix() {
+    const glm::mat4& BasicProjection::getMatrix() {
         return this->matrix;
-    }
-
-    void Projection::computeProjectionMatrix() {
-        this->matrix = glm::perspective(glm::radians(this->fovY), this->aspectRatio, this->nearPlane, this->farPlane);
     }
 }

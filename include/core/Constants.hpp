@@ -24,6 +24,7 @@ namespace snd3D::constants {
         inline constexpr float EDGE_ALPHA_VALUE = 0.3f;
         inline constexpr float FACE_ALPHA_VALUE = 0.1f;
         inline constexpr float EDGE_THICKNESS = 1.5f;
+        inline constexpr bool ORTHOGRAPHIC_PROJECTION = false;
 
         namespace window {
             inline constexpr int WIDTH = 1280;

@@ -110,6 +110,11 @@ namespace snd3D {
             }
             if (ImGui::BeginMenu("View")) {
                 if (!interactionState) ImGui::BeginDisabled();
+                bool ortographic = this->app.scene->viewport->isOrthographic();
+                if (ImGui::MenuItem("Ortographic projection", "P", ortographic)) {
+                    this->app.scene->viewport->toggleProjectionType();
+                }
+                ImGui::Separator();
                 bool inspector = this->app.settings.isSceneInspectorActive();
                 if (ImGui::MenuItem("Scene inspector", "S", inspector)) {
                     this->app.settings.toggleSceneInspector();
@@ -141,54 +146,54 @@ namespace snd3D {
             if (ImGui::BeginMenu("Camera")) {
                 if (!interactionState) ImGui::BeginDisabled();
                 bool pivot = this->app.settings.isCameraPivotActive();
-                if (ImGui::MenuItem("Show Pivot", "P", pivot)) {
+                if (ImGui::MenuItem("Show Pivot", "X", pivot)) {
                     this->app.settings.toggleCameraPivot();
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Zoom In", "Scroll Up")) {
-                    this->app.scene->camera->zoom(constants::factors::ZOOM);
+                    this->app.scene->viewport->zoom(constants::factors::ZOOM);
                 }
                 if (ImGui::MenuItem("Zoom Out", "Scroll Down")) {
-                    this->app.scene->camera->zoom(-constants::factors::ZOOM);
+                    this->app.scene->viewport->zoom(-constants::factors::ZOOM);
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Rotate Up", "Up")) {
-                    this->app.scene->camera->rotateByAngles(0, constants::factors::ROTATION_SPEED);
+                    this->app.scene->viewport->rotateByAngles(0, constants::factors::ROTATION_SPEED);
                 }
                 if (ImGui::MenuItem("Rotate Down", "Down")) {
-                    this->app.scene->camera->rotateByAngles(0, -constants::factors::ROTATION_SPEED);
+                    this->app.scene->viewport->rotateByAngles(0, -constants::factors::ROTATION_SPEED);
                 }
                 if (ImGui::MenuItem("Rotate Right", "Right")) {
-                    this->app.scene->camera->rotateByAngles(constants::factors::ROTATION_SPEED, 0);
+                    this->app.scene->viewport->rotateByAngles(constants::factors::ROTATION_SPEED, 0);
                 }
                 if (ImGui::MenuItem("Rotate Left", "Left")) {
-                    this->app.scene->camera->rotateByAngles(-constants::factors::ROTATION_SPEED, 0);
+                    this->app.scene->viewport->rotateByAngles(-constants::factors::ROTATION_SPEED, 0);
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Move Forward", "Shift + Scroll Up")) {
-                    this->app.scene->camera->movePerpendicular(0, constants::factors::PAN);
+                    this->app.scene->viewport->movePerpendicular(0, constants::factors::PAN);
                 }
                 if (ImGui::MenuItem("Move Backward", "Shift + Scroll Down")) {
-                    this->app.scene->camera->movePerpendicular(0, -constants::factors::PAN);
+                    this->app.scene->viewport->movePerpendicular(0, -constants::factors::PAN);
                 }
                 if (ImGui::MenuItem("Move Up", "Shift + Up")) {
-                    this->app.scene->camera->moveParallel(0, constants::factors::PAN);
+                    this->app.scene->viewport->moveParallel(0, constants::factors::PAN);
                 }
                 if (ImGui::MenuItem("Move Down", "Shift + Down")) {
-                    this->app.scene->camera->moveParallel(0, -constants::factors::PAN);
+                    this->app.scene->viewport->moveParallel(0, -constants::factors::PAN);
                 }
                 if (ImGui::MenuItem("Move Right", "Shift + Right")) {
-                    this->app.scene->camera->moveParallel(constants::factors::PAN, 0);
+                    this->app.scene->viewport->moveParallel(constants::factors::PAN, 0);
                 }
                 if (ImGui::MenuItem("Move Left", "Shift + Left")) {
-                    this->app.scene->camera->moveParallel(-constants::factors::PAN, 0);
+                    this->app.scene->viewport->moveParallel(-constants::factors::PAN, 0);
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Reset Interaction", "ESC")) {
                     this->app.stateManager.resetInteraction();
                 }
                 if (ImGui::MenuItem("Reset Position", "R")) {
-                    this->app.scene->camera->reset();
+                    this->app.scene->viewport->reset();
                 }
                 if (!interactionState) ImGui::EndDisabled();
                 ImGui::EndMenu();
@@ -255,6 +260,26 @@ namespace snd3D {
             ImGui::SetNextWindowSize(ImVec2(450, 0), ImGuiCond_Once);
 
             ImGui::Begin("RENDER OPTIONS", &open, ImGuiWindowFlags_NoMove);
+
+            ImGui::Text("Projection Mode:");
+            int projMode = this->app.scene->viewport->isOrthographic() ? 1 : 0;
+
+            if (ImGui::RadioButton("Perspective", &projMode, 0)) {
+                if (this->app.scene->viewport->isOrthographic()) {
+                    this->app.scene->viewport->toggleProjectionType();
+                }
+            }
+            ImGui::SameLine();
+            if (ImGui::RadioButton("Orthographic", &projMode, 1)) {
+                if (!this->app.scene->viewport->isOrthographic()) {
+                    this->app.scene->viewport->toggleProjectionType();
+                }
+            }
+
+            ImGui::NewLine();
+            ImGui::Separator();
+            ImGui::NewLine();
+
             bool transparency = this->app.settings.isTransparencyEnabled();
             if (ImGui::Checkbox("Transparency", &transparency)) {
                 this->app.settings.toggleTransparency();
@@ -279,6 +304,7 @@ namespace snd3D {
                     this->app.settings.setFaceAlphaValue(constants::defaults::FACE_ALPHA_VALUE);
                     this->app.settings.setEdgeThickness(constants::defaults::EDGE_THICKNESS);
                 }
+                ImGui::NewLine();
             }
             ImGui::End();
         }
