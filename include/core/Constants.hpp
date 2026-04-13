@@ -42,7 +42,7 @@ namespace snd3D::constants {
         inline constexpr float GUI_FONT_RESIZE = 1.1f;
         inline constexpr float ZOOM = 0.1f;
         inline constexpr float ROTATION_SPEED = 2;
-        inline constexpr float PERPENDICULAR_PAN = 20;
+        inline constexpr float PAN = 20;
     }
 
     namespace sizes {

@@ -172,7 +172,7 @@ namespace snd3D {
         switch (this->app.stateManager.getCurrentState()) {
             case AppState::PAN:
             case AppState::MOVING_PAN:
-                this->app.scene->camera->movePerpendicular(xOffset * constants::factors::PERPENDICULAR_PAN, yOffset * constants::factors::PERPENDICULAR_PAN);
+                this->app.scene->camera->movePerpendicular(xOffset * constants::factors::PAN, yOffset * constants::factors::PAN);
                 break;
 
             case AppState::TRACKBALL:

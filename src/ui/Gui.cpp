@@ -152,17 +152,36 @@ namespace snd3D {
                     this->app.scene->camera->zoom(-constants::factors::ZOOM);
                 }
                 ImGui::Separator();
-                if (ImGui::MenuItem("Move Right", "Right")) {
-                    this->app.scene->camera->rotateByAngles(constants::factors::ROTATION_SPEED, 0);
-                }
-                if (ImGui::MenuItem("Move Left", "Left")) {
-                    this->app.scene->camera->rotateByAngles(-constants::factors::ROTATION_SPEED, 0);
-                }
-                if (ImGui::MenuItem("Move Up", "Up")) {
+                if (ImGui::MenuItem("Rotate Up", "Up")) {
                     this->app.scene->camera->rotateByAngles(0, constants::factors::ROTATION_SPEED);
                 }
-                if (ImGui::MenuItem("Move Down", "Down")) {
+                if (ImGui::MenuItem("Rotate Down", "Down")) {
                     this->app.scene->camera->rotateByAngles(0, -constants::factors::ROTATION_SPEED);
+                }
+                if (ImGui::MenuItem("Rotate Right", "Right")) {
+                    this->app.scene->camera->rotateByAngles(constants::factors::ROTATION_SPEED, 0);
+                }
+                if (ImGui::MenuItem("Rotate Left", "Left")) {
+                    this->app.scene->camera->rotateByAngles(-constants::factors::ROTATION_SPEED, 0);
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Move Forward", "Shift + Scroll Up")) {
+                    this->app.scene->camera->movePerpendicular(0, constants::factors::PAN);
+                }
+                if (ImGui::MenuItem("Move Backward", "Shift + Scroll Down")) {
+                    this->app.scene->camera->movePerpendicular(0, -constants::factors::PAN);
+                }
+                if (ImGui::MenuItem("Move Up", "Shift + Up")) {
+                    this->app.scene->camera->moveParallel(0, constants::factors::PAN);
+                }
+                if (ImGui::MenuItem("Move Down", "Shift + Down")) {
+                    this->app.scene->camera->moveParallel(0, -constants::factors::PAN);
+                }
+                if (ImGui::MenuItem("Move Right", "Shift + Right")) {
+                    this->app.scene->camera->moveParallel(constants::factors::PAN, 0);
+                }
+                if (ImGui::MenuItem("Move Left", "Shift + Left")) {
+                    this->app.scene->camera->moveParallel(-constants::factors::PAN, 0);
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Reset Interaction", "ESC")) {
@@ -178,7 +197,7 @@ namespace snd3D {
             // Move FPS label at the end of the window
             float fps = ImGui::GetIO().Framerate;
             char label[50];
-            sprintf(label, "%s - %.1f FPS", appStateToString(this->app.stateManager.getCurrentState()), fps);
+            sprintf(label, "%s - %05.1f FPS", appStateToString(this->app.stateManager.getCurrentState()), fps);
             float textWidth = ImGui::CalcTextSize(label).x;
             float padding = ImGui::GetStyle().ItemSpacing.x;
             ImGui::SetCursorPosX(ImGui::GetWindowWidth() - textWidth - padding);
