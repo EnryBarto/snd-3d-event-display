@@ -27,6 +27,7 @@ namespace snd3D {
             void rotateTrackball(glm::vec3 origin, glm::vec3 destination);
 
             void setAspectRatio(float newAspectRatio);
+            void setDirection(Camera::Directions direction);
             void toggleProjectionType();
             void zoom(float offset);
             void reset();

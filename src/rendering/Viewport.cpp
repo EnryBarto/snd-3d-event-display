@@ -61,6 +61,16 @@ namespace snd3D {
         this->projection->setAspectRatio(newAspectRatio);
     }
 
+    void Viewport::setDirection(Camera::Directions direction) {
+        this->camera->setDirection(direction);
+        if (!this->ortographic) {
+            this->projection = std::unique_ptr<Projection>(
+                new OrthographicProjection(this->aspectRatio, constants::defaults::PROJ_FOVY, glm::distance(camera->getPosition(), camera->getTarget()))
+            );
+            this->ortographic = true;
+        }
+    }
+
     void Viewport::toggleProjectionType() {
         this->ortographic = !this->ortographic;
         this->projection = std::unique_ptr<Projection>(this->ortographic ? (Projection*)

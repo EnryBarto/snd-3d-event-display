@@ -49,6 +49,22 @@ namespace snd3D {
 
         if (mods & GLFW_MOD_CONTROL) { // CTRL pressed
             switch (key) {
+
+                case GLFW_KEY_KP_1:
+                case GLFW_KEY_1:
+                    if (interactionState) this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_Z_NEG);
+                    break;
+
+                case GLFW_KEY_KP_3:
+                case GLFW_KEY_3:
+                    if (interactionState) this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_X_NEG);
+                    break;
+
+                case GLFW_KEY_KP_7:
+                case GLFW_KEY_7:
+                    if (interactionState) this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_Y_NEG);
+                    break;
+
                 case GLFW_KEY_KP_ADD:
                 case GLFW_KEY_EQUAL:
                     this->app.guiManager->changeFontSize(constants::factors::GUI_FONT_RESIZE);
@@ -68,6 +84,26 @@ namespace snd3D {
             switch (key) {
                 case GLFW_KEY_F11:
                     this->app.windowManager->toggleFullScreen();
+                    break;
+
+                case GLFW_KEY_KP_0:
+                case GLFW_KEY_0:
+                    if (interactionState) this->app.scene->viewport->setDirection(Camera::Directions::ISOMETRIC);
+                    break;
+
+                case GLFW_KEY_KP_1:
+                case GLFW_KEY_1:
+                    if (interactionState) this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_Z);
+                    break;
+
+                case GLFW_KEY_KP_3:
+                case GLFW_KEY_3:
+                    if (interactionState) this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_X);
+                    break;
+
+                case GLFW_KEY_KP_7:
+                case GLFW_KEY_7:
+                    if (interactionState) this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_Y);
                     break;
 
                 case GLFW_KEY_G:

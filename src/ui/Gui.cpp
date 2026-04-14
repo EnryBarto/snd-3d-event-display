@@ -114,6 +114,18 @@ namespace snd3D {
                 if (ImGui::MenuItem("Ortographic projection", "P", ortographic)) {
                     this->app.scene->viewport->toggleProjectionType();
                 }
+                if (ImGui::BeginMenu("Standard views")) {
+                    if (ImGui::MenuItem("Top (XZ)", "7"))   this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_Y);
+                    if (ImGui::MenuItem("Front (XY)", "1")) this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_Z);
+                    if (ImGui::MenuItem("Right (YZ)", "3")) this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_X);
+                    ImGui::Separator();
+                    if (ImGui::MenuItem("Bottom (-XZ)", "Ctrl + 7"))  this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_Y_NEG);
+                    if (ImGui::MenuItem("Back (-XY)", "Ctrl + 1"))    this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_Z_NEG);
+                    if (ImGui::MenuItem("Left (-YZ)", "Ctrl + 3"))    this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_X_NEG);
+                    ImGui::Separator();
+                    if (ImGui::MenuItem("Isometric", "0"))  this->app.scene->viewport->setDirection(Camera::Directions::ISOMETRIC);
+                    ImGui::EndMenu();
+                }
                 ImGui::Separator();
                 bool inspector = this->app.settings.isSceneInspectorActive();
                 if (ImGui::MenuItem("Scene inspector", "S", inspector)) {
