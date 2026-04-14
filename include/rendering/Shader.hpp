@@ -15,7 +15,7 @@ namespace snd3D {
             std::string getName();
             GLuint getProgramId();
             void use();
-            void bindGlobalUniforms(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, const float edgeAlphaValue, const float faceAlphaValue, const float edgeThickness);
+            void bindGlobalUniforms(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& camPos, const float edgeAlphaValue = 0.5f, const float faceAlphaValue = 0.5f, const float edgeThickness = 0.25f);
             void bindLocalUniforms(const glm::mat4& modelMatrix, Material* material);
 
         private:

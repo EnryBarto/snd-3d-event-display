@@ -106,6 +106,10 @@ namespace snd3D {
                     if (interactionState) this->app.scene->viewport->setDirection(Camera::Directions::ALIGN_Y);
                     break;
 
+                case GLFW_KEY_A:
+                    if (interactionState) this->app.settings.toggleAxisWidget();
+                    break;
+
                 case GLFW_KEY_G:
                     if (interactionState) this->app.settings.toggleRenderOptions();
                     break;

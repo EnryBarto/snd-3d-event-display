@@ -139,6 +139,17 @@ namespace snd3D {
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Display")) {
+                if (!interactionState) ImGui::BeginDisabled();
+                bool pivot = this->app.settings.isCameraPivotActive();
+                if (ImGui::MenuItem("Show Pivot", "X", pivot)) {
+                    this->app.settings.toggleCameraPivot();
+                }
+                bool axis = this->app.settings.isAxisWidgetActive();
+                if (ImGui::MenuItem("Show Axis", "A", axis)) {
+                    this->app.settings.toggleAxisWidget();
+                }
+                if (!interactionState) ImGui::EndDisabled();
+                ImGui::Separator();
                 if (ImGui::MenuItem("Font +", "Ctrl + +")) {
                     this->changeFontSize(constants::factors::GUI_FONT_RESIZE);
                 }
@@ -157,11 +168,6 @@ namespace snd3D {
             }
             if (ImGui::BeginMenu("Camera")) {
                 if (!interactionState) ImGui::BeginDisabled();
-                bool pivot = this->app.settings.isCameraPivotActive();
-                if (ImGui::MenuItem("Show Pivot", "X", pivot)) {
-                    this->app.settings.toggleCameraPivot();
-                }
-                ImGui::Separator();
                 if (ImGui::MenuItem("Zoom In", "Scroll Up")) {
                     this->app.scene->viewport->zoom(constants::factors::ZOOM);
                 }

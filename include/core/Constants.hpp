@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string_view>
+#include <cstdint>
 
 namespace snd3D::constants {
 
@@ -20,11 +21,14 @@ namespace snd3D::constants {
     namespace defaults {
         inline constexpr float PROJ_FOVY = 80;
         inline constexpr bool SHOW_PIVOT = true;
+        inline constexpr bool SHOW_AXIS = true;
         inline constexpr bool TRANSPARENCY = true;
         inline constexpr float EDGE_ALPHA_VALUE = 0.3f;
         inline constexpr float FACE_ALPHA_VALUE = 0.1f;
         inline constexpr float EDGE_THICKNESS = 1.5f;
         inline constexpr bool ORTHOGRAPHIC_PROJECTION = false;
+        inline constexpr int AXIS_WIDGET_SIZE = 100;
+        inline constexpr int AXIS_WIDGET_MARGIN = 20;
 
         namespace window {
             inline constexpr int WIDTH = 1280;
@@ -52,5 +56,13 @@ namespace snd3D::constants {
         inline constexpr int ANCHOR = 15;
         inline constexpr float PIVOT = 5;
         inline constexpr int PADDING = 10;
+        inline constexpr float AXIS = 2.5f;
+    }
+
+    namespace graphics {
+        inline constexpr uint8_t VERTICES_LAYER = 0;
+        inline constexpr uint8_t COLORS_LAYER = 1;
+        inline constexpr uint8_t NORMALS_LAYER = 2;
+        inline constexpr uint8_t TEXTURE_LAYER = 3;
     }
 }

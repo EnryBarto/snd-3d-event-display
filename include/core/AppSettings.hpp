@@ -7,6 +7,8 @@ namespace snd3D {
         public:
             bool isCameraPivotActive();
             void toggleCameraPivot();
+            bool isAxisWidgetActive();
+            void toggleAxisWidget();
             bool isSceneInspectorActive();
             void toggleSceneInspector();
             bool isRenderOptionsActive();
@@ -23,6 +25,7 @@ namespace snd3D {
 
         private:
             bool cameraPivotActive = constants::defaults::SHOW_PIVOT;
+            bool axisWidgetActive = constants::defaults::SHOW_AXIS;
             bool sceneInspectorActive = true;
             bool renderOptionsActive = true;
             bool transparency = constants::defaults::TRANSPARENCY, transparencyChanged = true;

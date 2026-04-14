@@ -62,8 +62,8 @@ namespace snd3D {
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
 
         // Loading the vertices VBO into layer 0
-        glVertexAttribPointer(VERTICES_LAYER, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-        glEnableVertexAttribArray(VERTICES_LAYER);
+        glVertexAttribPointer(constants::graphics::VERTICES_LAYER, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        glEnableVertexAttribArray(constants::graphics::VERTICES_LAYER);
 
         // Generates, activates and fills the colors VBO
         glGenBuffers(1, &this->vboColors);
@@ -71,8 +71,8 @@ namespace snd3D {
         glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec4), colors.data(), GL_STATIC_DRAW);
 
         // Loading the colors VBO into layer 1
-        glVertexAttribPointer(COLORS_LAYER, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-        glEnableVertexAttribArray(COLORS_LAYER);
+        glVertexAttribPointer(constants::graphics::COLORS_LAYER, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        glEnableVertexAttribArray(constants::graphics::COLORS_LAYER);
 
         // Generates, activates and fills the normals VBO
         glGenBuffers(1, &this->vboNormals);
@@ -80,8 +80,8 @@ namespace snd3D {
         glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), normals.data(), GL_STATIC_DRAW);
 
         // Loading the normals VBO into layer 2
-        glVertexAttribPointer(NORMALS_LAYER, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-        glEnableVertexAttribArray(NORMALS_LAYER);
+        glVertexAttribPointer(constants::graphics::NORMALS_LAYER, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        glEnableVertexAttribArray(constants::graphics::NORMALS_LAYER);
 
         // Generates, activates and fills the EBO
         glGenBuffers(1, &this->eboIndices);

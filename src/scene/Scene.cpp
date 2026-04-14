@@ -5,17 +5,17 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "core/Constants.hpp"
-#include "rendering/PerspectiveProjection.hpp"
-#include "rendering/OrthographicProjection.hpp"
+#include "rendering/AxisWidget.hpp"
 
 namespace snd3D {
 
     Scene::Scene(WindowManager& winMan, AppStateManager& stateMan, AppSettings& appSettings) : windowManager(winMan), stateManager(stateMan), settings(appSettings) {
         this->viewport = std::make_unique<Viewport>(this->windowManager.getAspectRatio(), constants::defaults::ORTHOGRAPHIC_PROJECTION);
-        this->flat = std::make_shared<snd3D::Shader>("Flat", "flat.vert", "flat.frag");
-        this->transparent = std::make_shared<snd3D::Shader>("Transparent", "transparent.vert", "transparent.frag", "transparent.geom");
+        this->flat = std::make_shared<Shader>("Flat", "flat.vert", "flat.frag");
+        this->transparent = std::make_shared<Shader>("Transparent", "transparent.vert", "transparent.frag", "transparent.geom");
         this->pivot = std::unique_ptr<Object>(this->objectFactory.getSphere());
         this->pivot->setShader(this->flat);
+        this->axis = std::make_unique<AxisWidget>(this->flat, constants::defaults::AXIS_WIDGET_SIZE, constants::defaults::AXIS_WIDGET_MARGIN);
     }
 
     void Scene::update() {
@@ -111,6 +111,8 @@ namespace snd3D {
                 if (this->settings.isTransparencyEnabled()) {
                     glDepthMask(GL_TRUE);   // Final reset
                 }
+
+                if (this->settings.isAxisWidgetActive()) this->axis->draw(this->viewport->getViewMatrix(), this->windowManager.getCurrentResolution().x, this->windowManager.getCurrentResolution().y);
                 break;
         }
     }

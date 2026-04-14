@@ -28,11 +28,6 @@ namespace snd3D {
             void render(const glm::mat4& modelMatrix, bool showAnchor, Material* material);
 
         private:
-            const static uint8_t VERTICES_LAYER = 0;
-            const static uint8_t COLORS_LAYER = 1;
-            const static uint8_t NORMALS_LAYER = 2;
-            const static uint8_t TEXTURE_LAYER = 3;
-
             unsigned int numIndices, numVertices; // The number of vertices and indices without considering the anchor
 
             // GPU buffers location

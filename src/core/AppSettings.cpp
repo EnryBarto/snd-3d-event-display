@@ -11,6 +11,14 @@ namespace snd3D {
         this->cameraPivotActive = !this->cameraPivotActive;
     }
 
+    bool AppSettings::isAxisWidgetActive() {
+        return this->axisWidgetActive;
+    }
+
+    void AppSettings::toggleAxisWidget() {
+        this->axisWidgetActive = !this->axisWidgetActive;
+    }
+
     bool AppSettings::isSceneInspectorActive() {
         return this->sceneInspectorActive;
     }

@@ -10,6 +10,7 @@
 #include "core/WindowManager.hpp"
 #include "state/AppStateManager.hpp"
 #include "scene/ObjectFactory.hpp"
+#include "rendering/AxisWidget.hpp"
 
 namespace snd3D {
     class Scene {
@@ -27,6 +28,7 @@ namespace snd3D {
             std::unique_ptr<Viewport> viewport;
             std::unique_ptr<Object> detector;
             std::unique_ptr<Object> pivot;
+            std::unique_ptr<AxisWidget> axis;
             std::shared_ptr<Shader> flat;
             std::shared_ptr<Shader> transparent;
 
