@@ -38,7 +38,6 @@ namespace snd3D {
 
     void Object::setShader(const std::shared_ptr<Shader>& shader) {
         this->shader = shader;
-        this->rootNode->setShader(shader);
     }
 
     void Object::updateModelMatrix(const glm::mat4& modelMatrix) {
@@ -51,7 +50,7 @@ namespace snd3D {
             this->shader->use();
             this->shader->bindGlobalUniforms(viewport.getViewMatrix(), viewport.getProjectionMatrix(), viewport.getCameraPosition(), edgeAlphaValue, faceAlphaValue, edgeThickness);
             // Using the render mode without passing model matrix beacuse we calculated it in the object creation
-            this->rootNode->render(showAnchor);
+            this->rootNode->render(showAnchor, this->shader.get());
         }
     }
 

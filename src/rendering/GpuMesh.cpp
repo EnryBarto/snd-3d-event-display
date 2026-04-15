@@ -1,6 +1,6 @@
 #include "rendering/GpuMesh.hpp"
 
-#include <iostream>
+#include <stdexcept>
 
 #include "core/Constants.hpp"
 
@@ -8,40 +8,11 @@ using namespace std;
 
 namespace snd3D {
 
-    GpuMesh::~GpuMesh() {
-        // Free GPU resources when the mesh is destroyed
-        glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    GpuMesh::GpuMesh(vector<glm::vec3>& vertices, vector<glm::vec4>& colors, vector<glm::vec3>& normals, vector<GLuint>& indices, glm::vec3 anchorPosition) {
 
-        glDeleteVertexArrays(1, &this->vao);
-        glDeleteBuffers(1, &this->vboVertices);
-        glDeleteBuffers(1, &this->vboColors);
-        glDeleteBuffers(1, &this->vboNormals);
-        glDeleteBuffers(1, &this->eboIndices);
-    }
-
-    void GpuMesh::initBuffers(vector<glm::vec3>& vertices, vector<glm::vec4>& colors, vector<glm::vec3>& normals, vector<GLuint>& indices, glm::vec3 anchorPosition) {
-
-        if (this->vao != 0) {
-            cerr << "VAO already initialized" << endl;
-            return;
-        }
-
-        if (vertices.size() == 0) {
-            cerr << "Can't create VAO without vertices" << endl;
-            return;
-        }
-
-        if (colors.size() != vertices.size()) {
-            cerr << "The size of colors must match the size of vertices" << endl;
-            return;
-        }
-
-        if (normals.size() != vertices.size()) {
-            cerr << "The size of normals must match the size of vertices" << endl;
-            return;
-        }
+        if (vertices.size() == 0) throw runtime_error("Can't create VAO without vertices.");
+        if (colors.size() != vertices.size()) throw runtime_error("The size of colors must match the size of vertices.");
+        if (normals.size() != vertices.size()) throw runtime_error("The size of normals must match the size of vertices.");
 
         this->numIndices = indices.size();
         this->numVertices = vertices.size();
@@ -100,28 +71,24 @@ namespace snd3D {
         indices.pop_back();
     }
 
-    void GpuMesh::setModes(GLenum renderMode) {
+    GpuMesh::~GpuMesh() {
+        // Free GPU resources when the mesh is destroyed
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+        glDeleteVertexArrays(1, &this->vao);
+        glDeleteBuffers(1, &this->vboVertices);
+        glDeleteBuffers(1, &this->vboColors);
+        glDeleteBuffers(1, &this->vboNormals);
+        glDeleteBuffers(1, &this->eboIndices);
+    }
+
+    void GpuMesh::setRenderMode(GLenum renderMode) {
         this->drawMode = renderMode;
     }
 
-    void GpuMesh::setShader(std::shared_ptr<Shader> shader) {
-        this->shader = shader;
-    }
-
-    void GpuMesh::render(const glm::mat4& modelMatrix, bool showAnchor, Material* material) {
-
-        if (this->vao == 0) {
-            cerr << "ATTENTION!!! VAO not initialized" << endl;
-            return;
-        }
-
-        if (!this->shader) {
-            cerr << "ATTENTION!!! Shader not set" << endl;
-            return;
-        }
-
-        this->shader->bindLocalUniforms(modelMatrix, material);
-
+    void GpuMesh::render(bool showAnchor) {
         // RENDER!
         glBindVertexArray(this->vao);
         glDrawElements(this->drawMode, this->numIndices, GL_UNSIGNED_INT, 0);

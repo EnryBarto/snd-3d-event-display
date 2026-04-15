@@ -38,16 +38,6 @@ namespace snd3D {
         }
     }
 
-    void Node::setShader(const std::shared_ptr<Shader>& shader) {
-        for (auto& node : this->childrenNode) {
-            node->setShader(shader);
-        }
-
-        for (auto& mesh : this->meshes) {
-            mesh->setShader(shader);
-        }
-    }
-
     void Node::setGlobalActive(bool value) {
         this->active = value;
 
@@ -68,27 +58,27 @@ namespace snd3D {
         }
     }
 
-    void Node::render(const glm::mat4& parentModelMatrix, bool showAnchor) {
+    void Node::render(const glm::mat4& parentModelMatrix, bool showAnchor, Shader* shader) {
         glm::mat4 modelMatrix = parentModelMatrix * this->localModelMatrix;
 
         for (auto& node : this->childrenNode) {
-            node->render(modelMatrix, showAnchor);
+            node->render(modelMatrix, showAnchor, shader);
         }
 
         for (auto& mesh : this->meshes) {
-            mesh->render(modelMatrix, showAnchor);
+            mesh->render(modelMatrix, showAnchor, shader);
         }
     }
 
-    void Node::render(bool showAnchor) {
+    void Node::render(bool showAnchor, Shader* shader) {
 
         if (this->active) {
             for (auto& node : this->childrenNode) {
-                node->render(showAnchor);
+                node->render(showAnchor, shader);
             }
 
             for (auto& mesh : this->meshes) {
-                mesh->render(this->globalModelMatrix, showAnchor);
+                mesh->render(this->globalModelMatrix, showAnchor, shader);
             }
         }
     }

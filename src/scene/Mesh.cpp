@@ -11,8 +11,7 @@ namespace snd3D {
 
     Mesh::Mesh(string name, vector<vec3>& vertices, vector<vec4>& colors, vector<vec3>& normals, vector<GLuint>& indices, vec4 baseColor) {
         this->name = name;
-        this->gpuMesh = make_unique<GpuMesh>();
-        this->gpuMesh->initBuffers(vertices, colors, normals, indices, vertices[0]);
+        this->gpuMesh = make_unique<GpuMesh>(vertices, colors, normals, indices, vertices[0]);
     }
 
     Mesh::Mesh(aiMesh* mesh, vec4 baseColor) {
@@ -67,25 +66,25 @@ namespace snd3D {
             indices.push_back(mesh->mFaces[i].mIndices[2]);
         }
 
-        this->gpuMesh = make_unique<GpuMesh>();
-        this->gpuMesh->initBuffers(vertices, colors, normals, indices, vertices[0]);
+        this->gpuMesh = make_unique<GpuMesh>(vertices, colors, normals, indices, vertices[0]);
     }
 
     void Mesh::setMaterial(const shared_ptr<Material>& material) {
         this->material = material;
     }
 
-    void Mesh::setShader(const std::shared_ptr<Shader>& shader) {
-        this->gpuMesh->setShader(shader);
-    }
-
     void Mesh::setActive(bool value) {
         this->active = value;
     }
 
-    void Mesh::render(const glm::mat4& modelMatrix, bool showAnchor) {
+    void Mesh::render(const glm::mat4& modelMatrix, bool showAnchor, Shader* shader) {
         if (this->active) {
-            this->gpuMesh->render(modelMatrix, showAnchor, this->material.get());
+            if (shader == nullptr) {
+                cerr << "ATTENTION!!! Shader not set" << endl;
+                return;
+            }
+            shader->bindLocalUniforms(modelMatrix, this->material.get());
+            this->gpuMesh->render(showAnchor);
         }
     }
 }
