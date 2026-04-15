@@ -1,9 +1,18 @@
+#include <cstdlib>
+#include <iostream>
+
 #include "core/App.hpp"
 
 int main() {
 
-    snd3D::App app;
-    app.run();
+    try {
+        snd3D::App app;
+        app.run();
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "An Exception Occurred:\n" << ex.what() << std::endl;
+        return EXIT_FAILURE;
+    }
 
-    return 0;
+    return EXIT_SUCCESS;
 }

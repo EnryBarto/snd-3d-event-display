@@ -1,13 +1,15 @@
 #include "rendering/engine/ShaderMaker.hpp"
 
-#include <iostream>
+#include <stdexcept>
 
 namespace snd3D {
     #pragma warning(disable:4996)
     char* ShaderMaker::readShaderSource(std::string shaderFile) {
         FILE* fp = fopen(shaderFile.c_str(), "rb");
 
-        if (fp == NULL) { return NULL; }
+        if (fp == NULL) {
+            throw std::runtime_error("ERROR READING SHADER FILE.\nFile not found:\n" + shaderFile);
+        }
 
         fseek(fp, 0L, SEEK_END);
         long size = ftell(fp);
@@ -35,7 +37,7 @@ namespace snd3D {
         glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(vertexShaderId, 512, NULL, infoLog);
-            std::cerr << "ERROR::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+            throw std::runtime_error("ERROR::VERTEX::COMPILATION_FAILED\n" + std::string(infoLog));
         }
 
         // --- GEOMETRY SHADER ---
@@ -49,7 +51,7 @@ namespace snd3D {
             glGetShaderiv(geometryShaderId, GL_COMPILE_STATUS, &success);
             if (!success) {
                 glGetShaderInfoLog(geometryShaderId, 512, NULL, infoLog);
-                std::cerr << "ERROR::GEOMETRY::COMPILATION_FAILED\n" << infoLog << std::endl;
+                throw std::runtime_error("ERROR::GEOMETRY::COMPILATION_FAILED\n" + std::string(infoLog));
             }
         }
 
@@ -62,7 +64,7 @@ namespace snd3D {
         glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(fragmentShaderId, 512, NULL, infoLog);
-            std::cerr << "ERROR::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+            throw std::runtime_error("ERROR::FRAGMENT::COMPILATION_FAILED\n" + std::string(infoLog));
         }
 
         // SHADER CREATION
@@ -76,7 +78,7 @@ namespace snd3D {
         glGetProgramiv(programId, GL_LINK_STATUS, &success);
         if (!success) {
             glGetProgramInfoLog(programId, 512, NULL, infoLog);
-            std::cerr << "ERROR::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+            throw std::runtime_error("ERROR::PROGRAM::LINKING_FAILED\n" + std::string(infoLog));
         }
 
         // CLEANUP

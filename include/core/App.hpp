@@ -23,6 +23,7 @@ namespace snd3D {
         private:
             AppSettings settings;
             AppStateManager stateManager;
+            std::unique_ptr<Callbacks> callbacks;
             std::unique_ptr<Gui> guiManager;
             std::unique_ptr<WindowManager> windowManager;
             std::unique_ptr<Scene> scene;
