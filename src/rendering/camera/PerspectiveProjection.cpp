@@ -1,4 +1,4 @@
-#include "rendering/PerspectiveProjection.hpp"
+#include "rendering/camera/PerspectiveProjection.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 

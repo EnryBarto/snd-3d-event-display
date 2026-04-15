@@ -5,7 +5,7 @@
 #include <imgui.h>
 #include <glm/glm.hpp>
 
-#include "rendering/Shader.hpp"
+#include "rendering/engine/Shader.hpp"
 
 namespace snd3D {
     class AxisWidget {

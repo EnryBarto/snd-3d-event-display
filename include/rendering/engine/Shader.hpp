@@ -5,7 +5,7 @@
 #include <glad/glad.h>
 #include <glm/fwd.hpp>
 
-#include "rendering/Material.hpp"
+#include "rendering/engine/Material.hpp"
 
 namespace snd3D {
     class Shader {

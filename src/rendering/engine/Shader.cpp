@@ -1,9 +1,9 @@
-#include "rendering/Shader.hpp"
+#include "rendering/engine/Shader.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 
 #include "core/Constants.hpp"
-#include "rendering/ShaderMaker.hpp"
+#include "rendering/engine/ShaderMaker.hpp"
 
 namespace snd3D {
 

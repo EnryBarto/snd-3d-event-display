@@ -4,8 +4,8 @@
 
 #include <glm/glm.hpp>
 
-#include "rendering/Camera.hpp"
-#include "rendering/Projection.hpp"
+#include "rendering/camera/Camera.hpp"
+#include "rendering/camera/Projection.hpp"
 
 namespace snd3D {
     class Viewport {

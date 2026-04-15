@@ -1,4 +1,4 @@
-#include "rendering/Material.hpp"
+#include "rendering/engine/Material.hpp"
 
 #include <assimp/material.h>
 #include <assimp/GltfMaterial.h>

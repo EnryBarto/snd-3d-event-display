@@ -1,4 +1,4 @@
-#include "rendering/OrthographicProjection.hpp"
+#include "rendering/camera/OrthographicProjection.hpp"
 
 #include <cmath>
 

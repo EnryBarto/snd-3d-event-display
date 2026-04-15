@@ -1,8 +1,8 @@
 #include "rendering/Viewport.hpp"
 
 #include "core/Constants.hpp"
-#include "rendering/OrthographicProjection.hpp"
-#include "rendering/PerspectiveProjection.hpp"
+#include "rendering/camera/OrthographicProjection.hpp"
+#include "rendering/camera/PerspectiveProjection.hpp"
 
 namespace snd3D {
 

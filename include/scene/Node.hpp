@@ -8,7 +8,7 @@
 #include <assimp/scene.h>
 
 #include "scene/Mesh.hpp"
-#include "rendering/Shader.hpp"
+#include "rendering/engine/Shader.hpp"
 
 namespace snd3D {
     class Node {

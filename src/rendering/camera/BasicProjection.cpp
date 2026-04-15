@@ -1,4 +1,4 @@
-#include "rendering/BasicProjection.hpp"
+#include "rendering/camera/BasicProjection.hpp"
 
 #include <glm/glm.hpp>
 

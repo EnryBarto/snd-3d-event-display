@@ -6,9 +6,9 @@
 #include <assimp/mesh.h>
 #include <glm/glm.hpp>
 
-#include "rendering/Material.hpp"
-#include "rendering/GpuMesh.hpp"
-#include "rendering/Shader.hpp"
+#include "rendering/engine/Material.hpp"
+#include "rendering/engine/GpuMesh.hpp"
+#include "rendering/engine/Shader.hpp"
 
 namespace snd3D {
     class Mesh {

@@ -1,13 +1,12 @@
 #pragma once
 
 #include <memory>
-#include <string>
 
 #include <assimp/scene.h>
 #include <glm/fwd.hpp>
 
 #include "scene/Node.hpp"
-#include "rendering/Shader.hpp"
+#include "rendering/engine/Shader.hpp"
 #include "rendering/Viewport.hpp"
 
 namespace snd3D {

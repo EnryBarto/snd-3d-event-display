@@ -1,4 +1,4 @@
-#include "rendering/GpuMesh.hpp"
+#include "rendering/engine/GpuMesh.hpp"
 
 #include <stdexcept>
 

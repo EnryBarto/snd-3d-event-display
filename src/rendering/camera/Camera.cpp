@@ -1,4 +1,4 @@
-#include "rendering/Camera.hpp"
+#include "rendering/camera/Camera.hpp"
 
 #include <cmath>
 
